@@ -13,13 +13,17 @@ use Route;
 class AdminProfileController extends Controller
 {
 
+    /**
+     * Admin profile page
+     *
+     * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View
+     */
     public function AdminProfile(){
 
         $id = Auth::user()->id;
         $adminData = User::find( $id );
 
-
-        return view('admin.admin_profile_view',compact('adminData'));
+        return view( 'admin.admin_profile_view', compact( 'adminData' ) );
 
     }
 
@@ -28,7 +32,7 @@ class AdminProfileController extends Controller
         $id = Auth::user()->id;
 //        $editData = Admin::find($id);
         $editData = User::find($id);
-        return view('admin.admin_profile_edit',compact('editData'));
+        return view('admin.admin_profile_edit', compact('editData'));
 
     }
 

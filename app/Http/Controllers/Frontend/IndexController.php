@@ -14,29 +14,73 @@ class IndexController extends Controller
 {
 
     public function __construct( ) {
-        $this->middleware('auth');
+//        $this->middleware('auth');
     }
 
+    /**
+     * Main home page
+     *
+     * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View
+     */
     public function index(){
-
-        $id = Auth::user()->id;
-        $editData = User::find( $id );
-        return view('frontend.index',compact('editData'));
+        return view('frontend.index');
 
     }
 
+    /**
+     * Function for user log out
+     *
+     * @return \Illuminate\Http\RedirectResponse
+     */
     public function UserLogout(){
         Auth::logout();
         return Redirect()->route('login');
     }
 
+    /**
+     * Function for log in
+     *
+     * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View
+     */
+    public function loginForm(){
+        return view('auth.admin_login', ['guard' => 'admin']);
+    }
 
+    /**
+     * Custom login form function
+     *
+     * @param Request $request
+     * @return mixed
+     */
+    public function customLogin( Request $request) {
+        $request->validate([
+            'email'    => 'required',
+            'password' => 'required',
+        ]);
+
+        $credentials = $request->only('email', 'password');
+        if (Auth::attempt($credentials)) {
+            return redirect()->intended('dashboard')
+                ->withSuccess('Signed in');
+        }
+        else {
+//            return redirect()->route('dashboard')->with($notification);
+            return redirect("admin/login")->withErrors(['msg' => 'Login details are not valid']);
+        }
+
+    }
+
+
+    /**
+     * Function for getting user profile page
+     *
+     * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View
+     */
     public function UserProfile(){
         $id = Auth::user()->id;
         $user = User::find($id);
         return view('frontend.profile.user_profile',compact('user'));
     }
-
 
 
     public function UserProfileStore(Request $request){
@@ -94,9 +138,6 @@ class IndexController extends Controller
 
 
     }// end method
-
-
-
 
 
 }

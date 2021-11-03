@@ -17,6 +17,7 @@ use Laravel\Fortify\Features;
 use Laravel\Fortify\Fortify;
 use Laravel\Fortify\Http\Requests\LoginRequest;
 use Illuminate\Support\Facades\Auth;
+use App\Models\User;
 
 class AdminController extends Controller
 {
@@ -36,26 +37,23 @@ class AdminController extends Controller
     public function __construct(StatefulGuard $guard)
     {
         $this->guard = $guard;
+        $this->middleware('auth');
 
     }
 
-    public function loginForm(){
-    	return view('auth.admin_login', ['guard' => 'admin']);
-    }
+    /**
+     * Admin profile page
+     *
+     * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View
+     */
+    public function UserProfile(){
 
-    public function customLogin( Request $request) {
-        $request->validate([
-            'email'    => 'required',
-            'password' => 'required',
-        ]);
+        $id = Auth::user()->id;
+        $adminData = User::find( $id );
 
-        $credentials = $request->only('email', 'password');
-        if (Auth::attempt($credentials)) {
-            return redirect()->intended('dashboard')
-                ->withSuccess('Signed in');
-        }
+        $viewFile = (  $adminData->user_role == 'user' ) ? 'dashboard' : 'admin.index';
+        return view( $viewFile,compact( 'adminData' ) );
 
-        return redirect("admin.login")->withSuccess('Login details are not valid');
     }
 
     /**

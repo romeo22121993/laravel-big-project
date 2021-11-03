@@ -32,6 +32,16 @@
                     </div>
                     <div class="p-30 rounded30 box-shadowed b-2 b-dashed">
 
+                        @if ($errors->any())
+                            <div class="alert alert-danger">
+                                <ul>
+                                    @foreach ($errors->all() as $error)
+                                        <li>{{ $error }}</li>
+                                    @endforeach
+                                </ul>
+                            </div>
+                        @endif
+
                         <form method="POST" action="{{ isset($guard) ? url($guard.'/login') : route('login') }}">
                             @csrf
 
@@ -40,7 +50,7 @@
                                     <div class="input-group-prepend">
                                         <span class="input-group-text bg-transparent text-white"><i class="ti-user"></i></span>
                                     </div>
-                                    <input type="email" id="email" name="email" class="form-control pl-15 bg-transparent text-white plc-white" placeholder="Email">
+                                    <input type="email" id="email" name="email" value="{{ old('email') }}" class="form-control pl-15 bg-transparent text-white plc-white" placeholder="Email">
                                 </div>
                             </div>
                             <div class="form-group">
