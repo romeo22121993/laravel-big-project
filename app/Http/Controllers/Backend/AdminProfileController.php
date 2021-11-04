@@ -13,6 +13,10 @@ use Route;
 class AdminProfileController extends Controller
 {
 
+    public function __construct () {
+       $this->middleware('admin');
+    }
+
     /**
      * Admin profile page
      *
@@ -27,16 +31,25 @@ class AdminProfileController extends Controller
 
     }
 
+    /**
+     * Function for editing admin profile
+     *
+     * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View
+     */
     public function AdminProfileEdit(){
 
         $id = Auth::user()->id;
-//        $editData = Admin::find($id);
         $editData = User::find($id);
         return view('admin.admin_profile_edit', compact('editData'));
 
     }
 
-
+    /**
+     * Function for editing store data
+     *
+     * @param Request $request
+     * @return \Illuminate\Http\RedirectResponse
+     */
     public function AdminProfileStore(Request $request){
 
         $id   = Auth::user()->id;
@@ -63,16 +76,22 @@ class AdminProfileController extends Controller
     } // end method
 
 
+    /**
+     * Function for view of change password page
+     *
+     * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View
+     */
     public function AdminChangePassword(){
         return view('admin.admin_change_password');
     }
 
+    /**
+     * Function of updating password
+     *
+     * @param Request $request
+     * @return \Illuminate\Http\RedirectResponse
+     */
     public function AdminUpdateChangePassword(Request $request){
-
-//        $validateData = $request->validate([
-//            'oldpassword' => 'required',
-//            'password'    => 'required|confirmed',
-//        ]);
 
         $request->validate([
             'oldpassword'   => ['required', new MatchOldPassword],

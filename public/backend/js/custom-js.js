@@ -10,6 +10,7 @@ $(function () {
             reader.readAsDataURL(e.target.files['0']);
         });
 
+
         $(".subsubcategory, .product_add").find('select[name="category_id"]').on('change', function(){
 
             let category_id = $(this).val();
@@ -29,6 +30,7 @@ $(function () {
                 alert('danger');
             }
         });
+
 
         $(".product_add").find('select[name="subcategory_id"]').on('change', function(){
             let subcategory_id = $(this).val();
@@ -52,8 +54,8 @@ $(function () {
         $(".product_thambnail").on('change', function(){
             mainThamUrl($(this));
 
-
         });
+
 
         function mainThamUrl(input){
             console.log( 'this', input );

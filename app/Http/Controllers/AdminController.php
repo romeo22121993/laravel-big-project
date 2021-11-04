@@ -51,7 +51,7 @@ class AdminController extends Controller
         $id = Auth::user()->id;
         $adminData = User::find( $id );
 
-        $viewFile = (  $adminData->user_role == 'user' ) ? 'dashboard' : 'admin.index';
+        $viewFile = ( $adminData->user_role == 'user' ) ? 'frontend.profile.user_dashboard' : 'admin.index';
         return view( $viewFile,compact( 'adminData' ) );
 
     }

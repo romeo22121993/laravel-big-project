@@ -5,6 +5,7 @@ use App\Models\User;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\Backend\AdminProfileController;
+use App\Http\Controllers\Backend\UserProfileController;
 use App\Http\Controllers\Backend\BrandController;
 use App\Http\Controllers\Backend\CategoryController;
 use App\Http\Controllers\Backend\SubCategoryController;
@@ -47,12 +48,15 @@ use App\Http\Controllers\Frontend\ShopController;
 
 Route::group(['middleware' => 'web'], function () {
 
-    Route::get('/',          [IndexController::class, 'index'])->name('home');
+    Route::get('/',          [IndexController::class, 'Index'])->name('home');
     Route::get('/dashboard', [AdminController::class, 'UserProfile'])->name('dashboard');
 
+    Route::get('/logout',    [IndexController::class, 'UserLogout'])->name('logout');
+    Route::post('/login',    [IndexController::class, 'customLogin']);
 });
 
 Route::group(['prefix'=> 'admin'], function(){
+
 	Route::get('/login',  [IndexController::class, 'loginForm'])->name('admin.login');
 	Route::post('/login', [IndexController::class, 'customLogin']);
 
@@ -61,26 +65,24 @@ Route::group(['prefix'=> 'admin'], function(){
 
    // Admin All Routes
 
-    Route::get('/logout', [AdminController::class, 'destroy'])->name('admin.logout');
-    Route::get('/profile', [AdminProfileController::class, 'AdminProfile'])->name('admin.profile');
-    Route::get('/profile/edit', [AdminProfileController::class, 'AdminProfileEdit'])->name('admin.profile.edit');
-    Route::post('/profile/store', [AdminProfileController::class, 'AdminProfileStore'])->name('admin.profile.store');
-    Route::get('/change/password', [AdminProfileController::class, 'AdminChangePassword'])->name('admin.change.password');
-
-    Route::post('/update/change/password', [AdminProfileController::class, 'AdminUpdateChangePassword'])->name('update.change.password');
+    Route::get('/logout',           [AdminController::class, 'destroy'])->name('admin.logout');
+    Route::get('/profile',          [AdminProfileController::class, 'AdminProfile'])->name('admin.profile');
+    Route::get('/profile/edit',     [AdminProfileController::class, 'AdminProfileEdit'])->name('admin.profile.edit');
+    Route::post('/profile/store',   [AdminProfileController::class, 'AdminProfileStore'])->name('admin.profile.store');
+    Route::get('/change/password',  [AdminProfileController::class, 'AdminChangePassword'])->name('admin.change.password');
+    Route::post('/update/change/password', [AdminProfileController::class, 'AdminUpdateChangePassword'])->name('admin.update.password');
 
 });
 
+Route::group(['prefix'=> 'user'], function(){
 
+    Route::get('/profile',          [UserProfileController::class, 'UserProfile'])->name('user.profile');
+    Route::post('/profile/store',   [UserProfileController::class, 'UserProfileStore'])->name('user.profile.store');
+    Route::get('/change/password',  [UserProfileController::class, 'UserChangePassword'])->name('user.change.password');
+    Route::post('/update/password', [UserProfileController::class, 'UserPasswordUpdate'])->name('user.update.password');
 
+});
 
-
-
-Route::get('/user/logout', [IndexController::class, 'UserLogout'])->name('user.logout');
-Route::get('/user/profile', [IndexController::class, 'UserProfile'])->name('user.profile');
-Route::post('/user/profile/store', [IndexController::class, 'UserProfileStore'])->name('user.profile.store');
-Route::get('/user/change/password', [IndexController::class, 'UserChangePassword'])->name('change.password');
-Route::post('/user/password/update', [IndexController::class, 'UserPasswordUpdate'])->name('user.password.update');
 
 
 // Admin Brand All Routes
