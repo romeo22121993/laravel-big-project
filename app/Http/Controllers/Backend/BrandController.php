@@ -14,6 +14,11 @@ use Intervention\Image\Facades\Image;
 class BrandController extends Controller
 {
 
+    /**
+     * Function for view page for brands
+     *
+     * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View
+     */
     public function BrandView(){
 
         $brands = Brand::latest()->get();
@@ -21,13 +26,18 @@ class BrandController extends Controller
 
     }
 
-
+    /**
+     * Function of creating brand process
+     *
+     * @param Request $request
+     * @return \Illuminate\Http\RedirectResponse
+     */
     public function BrandStore(Request $request){
 
         $request->validate([
-            'brand_name_en' => 'required',
+            'brand_name_en'  => 'required',
             'brand_name_hin' => 'required',
-            'brand_image' => 'required',
+            'brand_image'    => 'required',
         ],[
             'brand_name_en.required' => 'Input Brand English Name',
             'brand_name_hin.required' => 'Input Brand Hindi Name',
@@ -41,10 +51,9 @@ class BrandController extends Controller
         Brand::insert([
             'brand_name_en' => $request->brand_name_en,
             'brand_name_hin' => $request->brand_name_hin,
-            'brand_slug_en' => strtolower(str_replace(' ', '-',$request->brand_name_en)),
-            'brand_slug_hin' => str_replace(' ', '-',$request->brand_name_hin),
+            'brand_slug_en' =>  strtolower(str_replace([' ', ','], ['-', '-'], $request->brand_name_en)),
+            'brand_slug_hin' => strtolower( str_replace([' ', ','], ['-', '-'], $request->brand_name_hin)),
             'brand_image' => $save_url,
-
         ]);
 
         $notification = array(
@@ -56,17 +65,29 @@ class BrandController extends Controller
 
     } // end method
 
+    /**
+     * Function for editing page
+     *
+     * @param $id
+     * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View
+     */
     public function BrandEdit($id){
         $brand = Brand::findOrFail($id);
         return view('backend.brand.brand_edit',compact('brand'));
     }
 
+    /**
+     * Function of updating brand
+     *
+     * @param Request $request
+     * @return \Illuminate\Http\RedirectResponse
+     */
     public function BrandUpdate(Request $request){
 
         $brand_id = $request->id;
         $old_img = $request->old_image;
 
-        if ($request->file('brand_image')) {
+        if ( $request->file('brand_image') ) {
 
             if ( file_exists($old_img) ) {
                 unlink($old_img);
@@ -81,7 +102,7 @@ class BrandController extends Controller
                 'brand_name_en' => $request->brand_name_en,
                 'brand_name_hin' => $request->brand_name_hin,
                 'brand_slug_en' => strtolower(str_replace(' ', '-',$request->brand_name_en)),
-                'brand_slug_hin' => str_replace(' ', '-',$request->brand_name_hin),
+                'brand_slug_hin' => strtolower(str_replace(' ', '-',$request->brand_name_hin)),
                 'brand_image' => $save_url,
             ]);
 
@@ -94,10 +115,10 @@ class BrandController extends Controller
 
         }else{
 
-            Brand::findOrFail($brand_id)->update([
-                'brand_name_en' => $request->brand_name_en,
+            Brand::findOrFail( $brand_id )->update([
+                'brand_name_en'  => $request->brand_name_en,
                 'brand_name_hin' => $request->brand_name_hin,
-                'brand_slug_en' => strtolower(str_replace(' ', '-',$request->brand_name_en)),
+                'brand_slug_en'  => strtolower(str_replace(' ', '-',$request->brand_name_en)),
                 'brand_slug_hin' => str_replace(' ', '-',$request->brand_name_hin),
             ]);
 
@@ -112,6 +133,12 @@ class BrandController extends Controller
     } // end method
 
 
+    /**
+     * Function for brands deletions
+     *
+     * @param $id
+     * @return \Illuminate\Http\RedirectResponse
+     */
     public function BrandDelete($id){
 
         $brand = Brand::findOrFail($id);
@@ -130,6 +157,5 @@ class BrandController extends Controller
         return redirect()->back()->with($notification);
 
     } // end method
-
 
 }

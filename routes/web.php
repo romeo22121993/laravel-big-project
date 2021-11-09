@@ -52,13 +52,14 @@ Route::group(['middleware' => 'web'], function () {
     Route::get('/dashboard', [AdminController::class, 'UserProfile'])->name('dashboard');
 
     Route::get('/logout',    [IndexController::class, 'UserLogout'])->name('logout');
-    Route::post('/login',    [IndexController::class, 'customLogin']);
+    Route::post('/login',    [IndexController::class, 'CustomLogin']);
+    Route::post('/testing-email',   [IndexController::class, 'TestEmail'])->name('send.testing.email');
 });
 
 Route::group(['prefix'=> 'admin'], function(){
 
 	Route::get('/login',  [IndexController::class, 'loginForm'])->name('admin.login');
-	Route::post('/login', [IndexController::class, 'customLogin']);
+	Route::post('/login', [IndexController::class, 'CustomLogin']);
 
     Route::get('/dashboard', [AdminProfileController::class, 'AdminProfile'])->name('admin.dashboard')
     ->middleware(['auth:sanctum', 'verified']);
@@ -84,15 +85,14 @@ Route::group(['prefix'=> 'user'], function(){
 });
 
 
-
 // Admin Brand All Routes
 Route::prefix('brand')->group(function(){
 
-    Route::get('/view', [BrandController::class, 'BrandView'])->name('brands.all');
-    Route::post('/store', [BrandController::class, 'BrandStore'])->name('brands.add');
-    Route::get('/edit/{id}', [BrandController::class, 'BrandEdit'])->name('brand.edit');
-    Route::post('/update', [BrandController::class, 'BrandUpdate'])->name('brand.update');
-    Route::get('/delete/{id}', [BrandController::class, 'BrandDelete'])->name('brand.delete');
+    Route::get('/view',        [BrandController::class, 'BrandView'])->name('brands.all');
+    Route::post('/store',      [BrandController::class, 'BrandStore'])->name('brands.add');
+    Route::get('/edit/{id}',   [BrandController::class, 'BrandEdit'])->name('brands.edit');
+    Route::post('/update',     [BrandController::class, 'BrandUpdate'])->name('brands.update');
+    Route::get('/delete/{id}', [BrandController::class, 'BrandDelete'])->name('brands.delete');
 
 });
 

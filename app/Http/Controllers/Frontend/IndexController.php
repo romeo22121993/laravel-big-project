@@ -8,6 +8,7 @@ use Auth;
 use App\Models\User;
 use App\Rules\MatchOldPassword;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Mail;
 
 
 class IndexController extends Controller
@@ -51,7 +52,7 @@ class IndexController extends Controller
      * @param Request $request
      * @return mixed
      */
-    public function customLogin( Request $request ) {
+    public function CustomLogin( Request $request ) {
         $request->validate([
             'email'    => 'required',
             'password' => 'required',
@@ -66,5 +67,33 @@ class IndexController extends Controller
         }
 
     }
+
+    /**
+     * Custom login form function
+     *
+     * @param Request $request
+     * @return mixed
+     */
+    public function TestEmail( Request $request ) {
+        $request->validate([
+            'email'    => 'required'
+        ]);
+
+
+        $email = $request->email;
+        $to_name = 'fff';
+        $to_email = $email;
+        $data = array('name'=> "Ogbonna Vitalis(sender_name)", "body" => "A test mail");
+        Mail::send( 'emails.mail', $data, function($message) use ($to_name, $to_email) {
+            $message->to($to_email, $to_name)
+                ->subject( 'Laravel Test Mail');
+            $message->from( 'roman.b.upqode@gmail.com', 'Test Mail');
+        });
+
+
+        return redirect()->route('dashboard')->withErrors(['msg' => 'Login details are not valid']);
+
+    }
+
 
 }

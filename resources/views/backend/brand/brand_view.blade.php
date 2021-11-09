@@ -16,35 +16,36 @@
                     </div>
                     <!-- /.box-header -->
                     <div class="box-body">
-                    <div class="table-responsive">
-                    <table id="example1" class="table table-bordered table-striped">
-                    <thead>
-                        <tr>
-                            <th>Brand En </th>
-                            <th>Brand Hin</th>
-                            <th>Image</th>
-                            <th>Action</th>
+                        <div class="table-responsive">
+                            <table id="example1" class="table table-bordered table-striped">
+                            <thead>
+                                <tr>
+                                    <th>Brand En </th>
+                                    <th>Brand Hin</th>
+                                    <th>Image</th>
+                                    <th>Action</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach($brands as $item)
+                                    <tr>
+                                        <td>{{ $item->brand_name_en }}</td>
+                                        <td>{{ $item->brand_name_hin }}</td>
+                                        <td><img src="{{ asset($item->brand_image) }}" style="width: 70px; height: 40px;"> </td>
+                                        <td>
+                                            <a href="{{ route('brands.edit', $item->id) }}" class="btn btn-info" title="Edit Data">
+                                                <i class="fa fa-pencil"></i>
+                                            </a>
+                                            <a href="{{ route('brands.delete', $item->id) }}" class="btn btn-danger" title="Delete Data" id="delete">
+                                                <i class="fa fa-trash"></i>
+                                            </a>
+                                        </td>
+                                    </tr>
+                                @endforeach
+                            </tbody>
 
-                        </tr>
-                    </thead>
-                    <tbody>
-                    @foreach($brands as $item)
-                    <tr>
-                    <td>{{ $item->brand_name_en }}</td>
-                    <td>{{ $item->brand_name_hin }}</td>
-                    <td><img src="{{ asset($item->brand_image) }}" style="width: 70px; height: 40px;"> </td>
-                    <td>
-                    <a href="{{ route('brands.edit', $item->id) }}" class="btn btn-info" title="Edit Data"><i class="fa fa-pencil"></i> </a>
-                    <a href="{{ route('brands.delete', $item->id) }}" class="btn btn-danger" title="Delete Data" id="delete">
-                    <i class="fa fa-trash"></i></a>
-                    </td>
-
-                    </tr>
-                    @endforeach
-                    </tbody>
-
-                    </table>
-                    </div>
+                        </table>
+                        </div>
                     </div>
                     <!-- /.box-body -->
                     </div>
