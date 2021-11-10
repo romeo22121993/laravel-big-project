@@ -1,8 +1,5 @@
 @extends('admin.admin_master')
 @section('admin')
-@php
-use \App\Http\Controllers\Backend\CategoryController;
-@endphp
 
 <!-- Content Wrapper. Contains page content -->
 <div class="container-full subsubcategory">
@@ -35,8 +32,8 @@ use \App\Http\Controllers\Backend\CategoryController;
                                 <tbody>
                                     @foreach($subsubcategory as $item)
                                         <tr>
-                                            <td>{{ CategoryController::get_name_by_id( $item->category_id) }}
-                                            <td>{{ CategoryController::get_name_by_id( $item->subcategory_id) }}
+                                            <td>{{ App::make('App\Http\Controllers\Backend\CategoryController')::get_name_by_id( $item->category_id) }}
+                                            <td>{{ App::make('App\Http\Controllers\Backend\CategoryController')::get_name_by_id( $item->subcategory_id) }}
                                             <td>{{ $item->category_name_en }}</td>
                                             <td width="30%">
                                                 <a href="{{ route('subsubcategory.edit',$item->id) }}" class="btn btn-info" title="Edit Data"><i class="fa fa-pencil"></i> </a>

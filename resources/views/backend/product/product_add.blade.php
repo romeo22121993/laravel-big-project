@@ -1,7 +1,6 @@
 @extends('admin.admin_master')
 @section('admin')
 
-
 <div class="container-full product_add">
     <!-- Content Header (Page header) -->
 
@@ -17,7 +16,7 @@
             <div class="box-body">
                 <div class="row">
                     <div class="col">
-                        <form method="post" action="{{ route('product-store') }}" enctype="multipart/form-data" >
+                        <form method="post" action="{{ route('product.store') }}" enctype="multipart/form-data" >
                             @csrf
 
                             <div class="row"> <!-- start 1st row  -->
@@ -159,7 +158,7 @@
                                     <div class="form-group">
                                         <h5>Product Tags En <span class="text-danger">*</span></h5>
                                         <div class="controls">
-                                            <input type="text" name="product_tags_en" class="form-control" value="Lorem,Ipsum,Amet" data-role="tagsinput" required="">
+                                            <input type="text" name="product_tags_en" class="form-control" value="Lorem" data-role="tagsinput" required="">
                                             @error('product_tags_en')
                                             <span class="text-danger">{{ $message }}</span>
                                             @enderror
@@ -176,7 +175,7 @@
                                     <div class="form-group">
                                         <h5>Product Tags Hin <span class="text-danger">*</span></h5>
                                         <div class="controls">
-                                            <input type="text" name="product_tags_hin" class="form-control" value="Lorem,Ipsum,Amet" data-role="tagsinput" required="">
+                                            <input type="text" name="product_tags_hin" class="form-control" value="Lorem" data-role="tagsinput" required="">
                                             @error('product_tags_hin')
                                             <span class="text-danger">{{ $message }}</span>
                                             @enderror
@@ -190,7 +189,7 @@
                                     <div class="form-group">
                                         <h5>Product Size En <span class="text-danger">*</span></h5>
                                         <div class="controls">
-                                            <input type="text" name="product_size_en" class="form-control" value="Small,Midium,Large" data-role="tagsinput" required="">
+                                            <input type="text" name="product_size_en" class="form-control" value="Small,Large" data-role="tagsinput" required="">
                                             @error('product_size_en')
                                             <span class="text-danger">{{ $message }}</span>
                                             @enderror
@@ -203,7 +202,7 @@
                                     <div class="form-group">
                                         <h5>Product Size Hin <span class="text-danger">*</span></h5>
                                         <div class="controls">
-                                            <input type="text" name="product_size_hin" class="form-control" value="Small,Midium,Large" data-role="tagsinput" required="">
+                                            <input type="text" name="product_size_hin" class="form-control" value="Small,Large" data-role="tagsinput" required="">
                                             @error('product_size_hin')
                                             <span class="text-danger">{{ $message }}</span>
                                             @enderror
@@ -220,7 +219,7 @@
                                     <div class="form-group">
                                         <h5>Product Color En <span class="text-danger">*</span></h5>
                                         <div class="controls">
-                                            <input type="text" name="product_color_en" class="form-control" value="red,Black,Amet" data-role="tagsinput" required="">
+                                            <input type="text" name="product_color_en" class="form-control" value="red,Black" data-role="tagsinput" required="">
                                             @error('product_color_en')
                                             <span class="text-danger">{{ $message }}</span>
                                             @enderror
@@ -234,7 +233,7 @@
                                     <div class="form-group">
                                         <h5>Product Color Hin <span class="text-danger">*</span></h5>
                                         <div class="controls">
-                                            <input type="text" name="product_color_hin" class="form-control" value="red,Black,Large" data-role="tagsinput" required="">
+                                            <input type="text" name="product_color_hin" class="form-control" value="red,Black" data-role="tagsinput" required="">
                                             @error('product_color_hin')
                                             <span class="text-danger">{{ $message }}</span>
                                             @enderror

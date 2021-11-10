@@ -1,8 +1,5 @@
 @extends('admin.admin_master')
 @section('admin')
-@php
- use \App\Http\Controllers\Backend\CategoryController;
-@endphp
 
 <!-- Content Wrapper. Contains page content -->
 <div class="container-full">
@@ -30,17 +27,19 @@
                             </thead>
                             <tbody>
                                 @foreach($subcategory as $item)
-                                    <tr>
-                                        <td>{{ CategoryController::get_name_by_id( $item->category_id) }}
-                                        </td>
-                                        <td>{{ $item->category_name_en }}</td>
-                                        <td>{{ $item->category_name_hin }}</td>
-                                        <td width="30%">
-                                            <a href="{{ route('subcategory.edit',$item->id) }}" class="btn btn-info" title="Edit Data"><i class="fa fa-pencil"></i> </a>
-                                            <a href="{{ route('subcategory.delete',$item->id) }}" class="btn btn-danger" title="Delete Data" id="delete">
-                                            <i class="fa fa-trash"></i></a>
-                                        </td>
-                                    </tr>
+                                    @if ( !empty( $item ))
+                                        <tr>
+                                            <td>{{ App::make('App\Http\Controllers\Backend\CategoryController')::get_name_by_id( $item->category_id) }}
+                                            </td>
+                                            <td>{{ $item->category_name_en }}</td>
+                                            <td>{{ $item->category_name_hin }}</td>
+                                            <td width="30%">
+                                                <a href="{{ route('subcategory.edit',$item->id) }}" class="btn btn-info" title="Edit Data"><i class="fa fa-pencil"></i> </a>
+                                                <a href="{{ route('subcategory.delete',$item->id) }}" class="btn btn-danger" title="Delete Data" id="delete">
+                                                <i class="fa fa-trash"></i></a>
+                                            </td>
+                                        </tr>
+                                    @endif
                                 @endforeach
                             </tbody>
 

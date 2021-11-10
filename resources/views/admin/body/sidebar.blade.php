@@ -1,6 +1,7 @@
 @php
   $prefix = Request::route()->getPrefix();
   $route  = Route::current()->getName();
+
 @endphp
 <aside class="main-sidebar">
     <!-- sidebar-->
@@ -28,7 +29,7 @@
                 </a>
             </li>
 
-            <li class="treeview {{ ($prefix == '/brand')?'active':'' }}  ">
+            <li class="treeview {{ ($prefix == 'admin/brand')?'active':'' }}  ">
                 <a href="#">
                     <i data-feather="message-circle"></i>
                     <span>Brands</span>
@@ -42,7 +43,7 @@
                 </ul>
             </li>
 
-            <li class="treeview {{ ($prefix == '/category')?'active':'' }}  ">
+            <li class="treeview {{ ($prefix == 'admin/category')?'active':'' }}  ">
                 <a href="#">
                     <i data-feather="mail"></i> <span>Category </span>
                     <span class="pull-right-container">
@@ -56,7 +57,7 @@
                 </ul>
             </li>
 
-            <li class="treeview {{ ($prefix == '/product')?'active':'' }}  ">
+            <li class="treeview {{ ($prefix == 'admin/product')?'active':'' }}  ">
                 <a href="#">
                     <i data-feather="mail"></i> <span>Products </span>
                     <span class="pull-right-container">
@@ -64,9 +65,9 @@
                     </span>
                 </a>
                 <ul class="treeview-menu">
-                    <li class="{{ ($route == 'manage-product')? 'active':'' }}"><a href="{{ route('manage-product') }}"><i class="ti-more"></i>All Products</a></li>
-                    <li class="{{ ($route == 'add-product')? 'active':'' }}"><a href="{{ route('add-product') }}"><i class="ti-more"></i>Add Product</a></li>
-                    <li class="{{ ($route == 'subsubcategory.all')? 'active':'' }}"><a href="{{ route('subsubcategory.all') }}"><i class="ti-more"></i>Manage Productss</a></li>
+                    <li class="{{ ($route == 'product.manage')? 'active':'' }}"><a href="{{ route('product.manage') }}"><i class="ti-more"></i>All Products</a></li>
+                    <li class="{{ ($route == 'product.add')? 'active':'' }}"><a href="{{ route('product.add') }}"><i class="ti-more"></i>Add Product</a></li>
+                    <li class="{{ ($route == 'products.all')? 'active':'' }}"><a href="{{ route('subsubcategory.all') }}"><i class="ti-more"></i>Manage Productss</a></li>
                 </ul>
             </li>
 

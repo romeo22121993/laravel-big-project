@@ -11,12 +11,16 @@ $(function () {
         });
 
 
-        $(".subsubcategory, .product_add").find('select[name="category_id"]').on('change', function(){
+        /**
+         * Ajax requests for getting sub/subsub categories
+         *
+         */
+        $(".subsubcategory, .product_add, .edit_product_page").find('select[name="category_id"]').on('change', function(){
 
             let category_id = $(this).val();
             if(category_id) {
                 $.ajax({
-                    url: '/category/subcategory/ajax/'+category_id,
+                    url: '/ajax/category/subcategory/'+category_id,
                     type:"GET",
                     dataType:"json",
                     success:function(data) {
@@ -32,11 +36,11 @@ $(function () {
         });
 
 
-        $(".product_add").find('select[name="subcategory_id"]').on('change', function(){
+        $(".product_add, .edit_product_page").find('select[name="subcategory_id"]').on('change', function(){
             let subcategory_id = $(this).val();
             if(subcategory_id) {
                 $.ajax({
-                    url: "/category/sub-subcategory/ajax/"+subcategory_id,
+                    url: "/ajax/category/sub-subcategory/"+subcategory_id,
                     type:"GET",
                     dataType:"json",
                     success:function(data) {
@@ -51,11 +55,14 @@ $(function () {
             }
         });
 
+
+        /**
+         * Function showing thumbnail image without reloading page
+         *
+         */
         $(".product_thambnail").on('change', function(){
             mainThamUrl($(this));
-
         });
-
 
         function mainThamUrl(input){
             console.log( 'this', input );
@@ -70,6 +77,10 @@ $(function () {
         }
 
 
+        /**
+         * Function showing multiimage without reloading page
+         *
+         */
         $('#multiImg').on('change', function(){ //on file input change
             if (window.File && window.FileReader && window.FileList && window.Blob) //check File API supported browser
             {

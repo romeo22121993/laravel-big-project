@@ -9,6 +9,7 @@ class MultiImg extends Model
 {
     use HasFactory;
 
+    protected $table = 'multi_imgs';
     protected $guarded = [];
 
 //    public function product(){
