@@ -67,7 +67,21 @@
                 <ul class="treeview-menu">
                     <li class="{{ ($route == 'product.manage')? 'active':'' }}"><a href="{{ route('product.manage') }}"><i class="ti-more"></i>All Products</a></li>
                     <li class="{{ ($route == 'product.add')? 'active':'' }}"><a href="{{ route('product.add') }}"><i class="ti-more"></i>Add Product</a></li>
-                    <li class="{{ ($route == 'products.all')? 'active':'' }}"><a href="{{ route('subsubcategory.all') }}"><i class="ti-more"></i>Manage Productss</a></li>
+                    <li class="{{ ($route == 'products.all')? 'active':'' }}"><a href="{{ route('product.manage') }}"><i class="ti-more"></i>Manage Products</a></li>
+                </ul>
+            </li>
+
+            <li class="treeview {{ ($prefix == 'admin/slider')?'active':'' }}  ">
+                <a href="#">
+                    <i data-feather="mail"></i> <span>Slider</span>
+                    <span class="pull-right-container">
+                        <i class="fa fa-angle-right pull-right"></i>
+                    </span>
+                </a>
+                <ul class="treeview-menu">
+                    <li class="{{ ($route == 'slider.manage')? 'active':'' }}"><a href="{{ route('slider.manage') }}"><i class="ti-more"></i>All Sliders</a></li>
+                    <li class="{{ ($route == 'slider.add')? 'active':'' }}"><a href="{{ route('slider.manage') }}"><i class="ti-more"></i>Add Slider</a></li>
+                    <li class="{{ ($route == 'slider.manage')? 'active':'' }}"><a href="{{ route('slider.manage') }}"><i class="ti-more"></i>Manage Sliders</a></li>
                 </ul>
             </li>
 

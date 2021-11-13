@@ -140,6 +140,20 @@ Route::group(['prefix'=> 'admin'], function(){
 
     });
 
+
+    // Admin Slider All Routes
+    Route::prefix('slider')->group(function(){
+
+        Route::get('/view',          [SliderController::class, 'SliderView'])->name('slider.manage');
+        Route::post('/store',        [SliderController::class, 'SliderStore'])->name('slider.store');
+        Route::get('/edit/{id}',     [SliderController::class, 'SliderEdit'])->name('slider.edit');
+        Route::post('/update',       [SliderController::class, 'SliderUpdate'])->name('slider.update');
+        Route::get('/delete/{id}',   [SliderController::class, 'SliderDelete'])->name('slider.delete');
+        Route::get('/inactive/{id}', [SliderController::class, 'SliderInactive'])->name('slider.inactive');
+        Route::get('/active/{id}',   [SliderController::class, 'SliderActive'])->name('slider.active');
+
+    });
+
 });
 
 Route::group(['prefix'=> 'user'], function(){
@@ -150,28 +164,6 @@ Route::group(['prefix'=> 'user'], function(){
     Route::post('/update/password', [UserProfileController::class, 'UserPasswordUpdate'])->name('user.update.password');
 
 });
-
-
-// Admin Slider All Routes
-
-Route::prefix('slider')->group(function(){
-
-Route::get('/view', [SliderController::class, 'SliderView'])->name('manage-slider');
-
-Route::post('/store', [SliderController::class, 'SliderStore'])->name('slider.store');
-
-Route::get('/edit/{id}', [SliderController::class, 'SliderEdit'])->name('slider.edit');
-
-Route::post('/update', [SliderController::class, 'SliderUpdate'])->name('slider.update');
-
-Route::get('/delete/{id}', [SliderController::class, 'SliderDelete'])->name('slider.delete');
-
-Route::get('/inactive/{id}', [SliderController::class, 'SliderInactive'])->name('slider.inactive');
-
-Route::get('/active/{id}', [SliderController::class, 'SliderActive'])->name('slider.active');
-
-});
-
 
 
 //// Frontend All Routes /////

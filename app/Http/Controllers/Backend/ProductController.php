@@ -212,30 +212,29 @@ class ProductController extends Controller
 
     /// Multiple Image Update
     public function MultiImageUpdate(Request $request){
-    $imgs = $request->multi_img;
+        $imgs = $request->multi_img;
 
-    foreach ($imgs as $id => $img) {
-    $imgDel = MultiImg::findOrFail($id);
-    unlink($imgDel->photo_name);
+        foreach ($imgs as $id => $img) {
+            $imgDel = MultiImg::findOrFail($id);
+            unlink($imgDel->photo_name);
 
-    $make_name = hexdec(uniqid()).'.'.$img->getClientOriginalExtension();
-    Image::make($img)->resize(917,1000)->save('upload/products/multi-image/'.$make_name);
-    $uploadPath = 'upload/products/multi-image/'.$make_name;
+            $make_name = hexdec(uniqid()).'.'.$img->getClientOriginalExtension();
+            Image::make($img)->resize(500,900)->save('upload/products/multi-image/'.$make_name);
+            $uploadPath = 'upload/products/multi-image/'.$make_name;
 
-    MultiImg::where('id',$id)->update([
-    'photo_name' => $uploadPath,
-    'updated_at' => Carbon::now(),
+            MultiImg::where('id',$id)->update([
+                'photo_name' => $uploadPath,
+                'updated_at' => Carbon::now(),
+            ]);
 
-    ]);
+        } // end foreach
 
-    } // end foreach
+        $notification = array(
+            'message' => 'Product Image Updated Successfully',
+            'alert-type' => 'info'
+        );
 
-    $notification = array(
-    'message' => 'Product Image Updated Successfully',
-    'alert-type' => 'info'
-    );
-
-    return redirect()->back()->with($notification);
+        return redirect()->back()->with($notification);
 
     } // end mehtod
 
