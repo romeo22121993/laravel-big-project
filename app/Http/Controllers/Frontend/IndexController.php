@@ -3,9 +3,13 @@
 namespace App\Http\Controllers\Frontend;
 
 use App\Http\Controllers\Controller;
+use App\Models\MultiImg;
+use App\Models\Product;
 use Illuminate\Http\Request;
 use Auth;
 use App\Models\User;
+use App\Models\Category;
+use App\Models\Slider;
 use App\Rules\MatchOldPassword;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Mail;
@@ -14,7 +18,8 @@ use Illuminate\Support\Facades\Mail;
 class IndexController extends Controller
 {
 
-    public function __construct( ) {
+    public function __construct()
+    {
 //        $this->middleware('auth');
     }
 
@@ -23,8 +28,42 @@ class IndexController extends Controller
      *
      * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View
      */
-    public function Index(){
-        return view('frontend.index');
+    public function Index()
+    {
+        $sliders = Slider::where('status', 1)->limit(5)->get();
+        $products = Product::where('status', 1)->get();
+        $categories = Category::where('category_id', 0)->orderBy('category_name_en', 'ASC')->get();
+        $subcategory = Category::where('category_id', '>', 0)->orderBy('category_name_en', 'ASC')->get();
+        $subsubcategory = Category::where('category_id', '>', 0)->where('subcategory_id', '>', 0)->orderBy('category_name_en', 'ASC')->get();
+
+        $featured = Product::where('featured', 1)->orderBy('id', 'DESC')->limit(6)->get();
+        $hot_deals = Product::where('hot_deals', 1)->where('discount_price', '!=', NULL)->orderBy('id', 'DESC')->limit(3)->get();
+        $special_offer = Product::where('special_offer', 1)->orderBy('id', 'DESC')->limit(6)->get();
+        $special_deals = Product::where('special_deals', 1)->orderBy('id', 'DESC')->limit(3)->get();
+
+        $tags_en  = Product::groupBy('product_tags_en')->select('product_tags_en')->get();
+        $tags_hin = Product::groupBy('product_tags_hin')->select('product_tags_hin')->get();
+
+        $tags_hin = $this->getDistinctTags( $tags_hin, 'hin' );
+        $tags_en  = $this->getDistinctTags( $tags_en, 'en' );
+
+        return view('frontend.index', compact( 'categories', 'subcategory', 'subsubcategory', 'sliders', 'products', 'featured', 'hot_deals', 'special_offer', 'special_deals', 'tags_en', 'tags_hin' ));
+    }
+
+    private function getDistinctTags( $array, $type ) {
+        $arr = array();
+
+        foreach ($array as $tag) {
+
+            $variable =  ( $type == 'hin' ) ? explode(',', $tag->product_tags_hin) : explode(',', $tag->product_tags_en);
+            foreach ( $variable as $tag ) {
+                if (!in_array($tag, $arr)) {
+                    $arr[] = $tag;
+                }
+            }
+        }
+
+        return $arr;
     }
 
     /**
@@ -43,7 +82,13 @@ class IndexController extends Controller
      * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View
      */
     public function loginForm(){
-        return view('auth.admin_login', ['guard' => 'admin']);
+
+        $sliders        = Slider::where('status', 1)->limit(5)->get();
+        $categories     = Category::where('category_id', 0)->orderBy('category_name_en','ASC')->get();
+        $subcategory    = Category::where('category_id','>', 0)->orderBy('category_name_en','ASC')->get();
+        $subsubcategory = Category::where('category_id','>', 0)->where('subcategory_id','>', 0)->orderBy('category_name_en','ASC')->get();
+
+        return view('auth.admin_login', compact( 'categories', 'subcategory', 'subsubcategory', 'sliders' ), ['guard' => 'admin']);
     }
 
     /**
@@ -79,7 +124,6 @@ class IndexController extends Controller
             'email'    => 'required'
         ]);
 
-
         $email = $request->email;
         $to_name = 'fff';
         $to_email = $email;
@@ -90,8 +134,38 @@ class IndexController extends Controller
             $message->from( 'roman.b.upqode@gmail.com', 'Test Mail');
         });
 
-
         return redirect()->route('dashboard')->withErrors(['msg' => 'Login details are not valid']);
+
+    }
+
+
+    /**
+     * Function for product detail page
+     *
+     * @param $id
+     * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View
+     */
+    public function ProductDetails($id){
+        $product = Product::findOrFail($id);
+
+        $color_en         = $product->product_color_en;
+        $product_color_en = explode(',', $color_en);
+
+        $color_hin         = $product->product_color_hin;
+        $product_color_hin = explode(',', $color_hin);
+
+        $size_en         = $product->product_size_en;
+        $product_size_en = explode(',', $size_en);
+
+        $size_hin         = $product->product_size_hin;
+        $product_size_hin = explode(',', $size_hin);
+
+        $multiImag        = MultiImg::where('product_id',$id)->get();
+
+        $cat_id         = $product->category_id;
+        $relatedProduct = Product::where('category_id',$cat_id)->where('id','!=',$id)->orderBy('id','DESC')->get();
+
+        return view('frontend.product.product_details',compact('product','multiImag','product_color_en','product_color_hin','product_size_en','product_size_hin','relatedProduct'));
 
     }
 

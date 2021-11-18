@@ -55,6 +55,11 @@ Route::group(['middleware' => 'web'], function () {
     Route::post('/login',    [IndexController::class, 'CustomLogin']);
     Route::post('/testing-email',   [IndexController::class, 'TestEmail'])->name('send.testing.email');
 
+    //// Frontend All Routes /////
+    /// Multi Language All Routes ////
+    Route::get('/language/hindi',   [LanguageController::class, 'Hindi'])->name('hindi.language');
+    Route::get('/language/english', [LanguageController::class, 'English'])->name('english.language');
+
 
     // Ajax requests
     Route::group(['prefix'=> 'ajax'], function(){
@@ -67,6 +72,17 @@ Route::group(['middleware' => 'web'], function () {
         });
     });
 
+    // Frontend Product Details Page url
+    Route::get('/product/details/{id}', [IndexController::class, 'ProductDetails']);
+
+    // Frontend Product Tags Page
+    Route::get('/product/tag/{tag}', [IndexController::class, 'TagWiseProduct']);
+
+    // Frontend SubCategory wise Data
+    Route::get('/subcategory/product/{subcat_id}/{slug}', [IndexController::class, 'SubCatWiseProduct']);
+
+    // Frontend Sub-SubCategory wise Data
+    Route::get('/subsubcategory/product/{subsubcat_id}/{slug}', [IndexController::class, 'SubSubCatWiseProduct']);
 });
 
 Route::group(['prefix'=> 'admin'], function(){
@@ -165,27 +181,6 @@ Route::group(['prefix'=> 'user'], function(){
 
 });
 
-
-//// Frontend All Routes /////
-/// Multi Language All Routes ////
-
-Route::get('/language/hindi', [LanguageController::class, 'Hindi'])->name('hindi.language');
-
-Route::get('/language/english', [LanguageController::class, 'English'])->name('english.language');
-
-
-// Frontend Product Details Page url
-Route::get('/product/details/{id}/{slug}', [IndexController::class, 'ProductDetails']);
-
-
-// Frontend Product Tags Page
-Route::get('/product/tag/{tag}', [IndexController::class, 'TagWiseProduct']);
-
-// Frontend SubCategory wise Data
-Route::get('/subcategory/product/{subcat_id}/{slug}', [IndexController::class, 'SubCatWiseProduct']);
-
-// Frontend Sub-SubCategory wise Data
-Route::get('/subsubcategory/product/{subsubcat_id}/{slug}', [IndexController::class, 'SubSubCatWiseProduct']);
 
 
 // Product View Modal with Ajax

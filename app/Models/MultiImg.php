@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use App\Models\Product;
 
 class MultiImg extends Model
 {
@@ -12,8 +13,8 @@ class MultiImg extends Model
     protected $table = 'multi_imgs';
     protected $guarded = [];
 
-//    public function product(){
-//        return $this->belongsTo(Product::class,'product_id','id');
-//    }
+    public function product(){
+        return $this->belongsTo(Product::class,'product_id','id');
+    }
 
 }

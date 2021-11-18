@@ -246,7 +246,6 @@ class CategoryController extends Controller
         $categories     = Category::where('category_id', 0)->orderBy('category_name_en','ASC')->get();
         $subsubcategory = Category::where('category_id','>', 0)->where('subcategory_id','>', 0)->orderBy('category_name_en','ASC')->get();
         return view('backend.category.sub_subcategory_view',compact('subsubcategory','categories'));
-
     }
 
 
