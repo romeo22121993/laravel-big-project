@@ -8,33 +8,33 @@ use App\Http\Controllers\Backend\AdminProfileController;
 use App\Http\Controllers\Backend\UserProfileController;
 use App\Http\Controllers\Backend\BrandController;
 use App\Http\Controllers\Backend\CategoryController;
-use App\Http\Controllers\Backend\SubCategoryController;
 use App\Http\Controllers\Backend\ProductController;
 use App\Http\Controllers\Backend\SliderController;
-use App\Http\Controllers\Backend\CouponController;
-use App\Http\Controllers\Backend\ShippingAreaController;
-use App\Http\Controllers\Backend\OrderController;
-use App\Http\Controllers\Backend\ReportController;
-use App\Http\Controllers\Backend\BlogController;
-use App\Http\Controllers\Backend\SiteSettingController;
-use App\Http\Controllers\Backend\ReturnController;
-use App\Http\Controllers\Backend\AdminUserController;
+//use App\Http\Controllers\Backend\CouponController;
+//use App\Http\Controllers\Backend\ShippingAreaController;
+//use App\Http\Controllers\Backend\OrderController;
+//use App\Http\Controllers\Backend\ReportController;
+//use App\Http\Controllers\Backend\BlogController;
+//use App\Http\Controllers\Backend\SiteSettingController;
+//use App\Http\Controllers\Backend\ReturnController;
+//use App\Http\Controllers\Backend\AdminUserController;
 
 use App\Http\Controllers\Frontend\IndexController;
+use App\Http\Controllers\Frontend\FrontEndController;
 use App\Http\Controllers\Frontend\LanguageController;
-use App\Http\Controllers\Frontend\CartController;
-use App\Http\Controllers\Frontend\HomeBlogController;
+//use App\Http\Controllers\Frontend\CartController;
+//use App\Http\Controllers\Frontend\HomeBlogController;
 
-use App\Http\Controllers\User\WishlistController;
-use App\Http\Controllers\User\CartPageController;
-use App\Http\Controllers\User\CheckoutController;
-use App\Http\Controllers\User\StripeController;
-use App\Http\Controllers\User\CashController;
-use App\Http\Controllers\User\ReviewController;
-
-use App\Http\Controllers\User\AllUserController;
-
-use App\Http\Controllers\Frontend\ShopController;
+//use App\Http\Controllers\User\WishlistController;
+//use App\Http\Controllers\User\CartPageController;
+//use App\Http\Controllers\User\CheckoutController;
+//use App\Http\Controllers\User\StripeController;
+//use App\Http\Controllers\User\CashController;
+//use App\Http\Controllers\User\ReviewController;
+//
+//use App\Http\Controllers\User\AllUserController;
+//
+//use App\Http\Controllers\Frontend\ShopController;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -73,16 +73,16 @@ Route::group(['middleware' => 'web'], function () {
     });
 
     // Frontend Product Details Page url
-    Route::get('/product/details/{id}', [IndexController::class, 'ProductDetails']);
+    Route::get('/product/details/{id}', [FrontEndController::class, 'ProductDetails']);
 
     // Frontend Product Tags Page
-    Route::get('/product/tag/{tag}', [IndexController::class, 'TagWiseProduct']);
+    Route::get('/product/tag/{tag}', [FrontEndController::class, 'TagWiseProduct']);
 
     // Frontend SubCategory wise Data
-    Route::get('/subcategory/product/{subcat_id}/{slug}', [IndexController::class, 'SubCatWiseProduct']);
+    Route::get('/subcategory/product/{subcat_id}/{slug}', [FrontEndController::class, 'SubCatWiseProduct']);
 
     // Frontend Sub-SubCategory wise Data
-    Route::get('/subsubcategory/product/{subsubcat_id}/{slug}', [IndexController::class, 'SubSubCatWiseProduct']);
+    Route::get('/subsubcategory/product/{subsubcat_id}/{slug}', [FrontEndController::class, 'SubSubCatWiseProduct']);
 });
 
 Route::group(['prefix'=> 'admin'], function(){

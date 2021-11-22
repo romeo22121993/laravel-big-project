@@ -20,7 +20,6 @@ class IndexController extends Controller
 
     public function __construct()
     {
-//        $this->middleware('auth');
     }
 
     /**
@@ -30,14 +29,14 @@ class IndexController extends Controller
      */
     public function Index()
     {
-        $sliders = Slider::where('status', 1)->limit(5)->get();
-        $products = Product::where('status', 1)->get();
-        $categories = Category::where('category_id', 0)->orderBy('category_name_en', 'ASC')->get();
-        $subcategory = Category::where('category_id', '>', 0)->orderBy('category_name_en', 'ASC')->get();
+        $sliders        = Slider::where('status', 1)->limit(5)->get();
+        $products       = Product::where('status', 1)->get();
+        $categories     = Category::where('category_id', 0)->orderBy('category_name_en', 'ASC')->get();
+        $subcategory    = Category::where('category_id', '>', 0)->orderBy('category_name_en', 'ASC')->get();
         $subsubcategory = Category::where('category_id', '>', 0)->where('subcategory_id', '>', 0)->orderBy('category_name_en', 'ASC')->get();
 
-        $featured = Product::where('featured', 1)->orderBy('id', 'DESC')->limit(6)->get();
-        $hot_deals = Product::where('hot_deals', 1)->where('discount_price', '!=', NULL)->orderBy('id', 'DESC')->limit(3)->get();
+        $featured      = Product::where('featured', 1)->orderBy('id', 'DESC')->limit(6)->get();
+        $hot_deals     = Product::where('hot_deals', 1)->where('discount_price', '!=', NULL)->orderBy('id', 'DESC')->limit(3)->get();
         $special_offer = Product::where('special_offer', 1)->orderBy('id', 'DESC')->limit(6)->get();
         $special_deals = Product::where('special_deals', 1)->orderBy('id', 'DESC')->limit(3)->get();
 
@@ -50,7 +49,14 @@ class IndexController extends Controller
         return view('frontend.index', compact( 'categories', 'subcategory', 'subsubcategory', 'sliders', 'products', 'featured', 'hot_deals', 'special_offer', 'special_deals', 'tags_en', 'tags_hin' ));
     }
 
-    private function getDistinctTags( $array, $type ) {
+    /**
+     * Helper function for getting distinct tags
+     *
+     * @param $array
+     * @param $type
+     * @return array
+     */
+    public function getDistinctTags( $array, $type ) {
         $arr = array();
 
         foreach ($array as $tag) {
@@ -65,6 +71,7 @@ class IndexController extends Controller
 
         return $arr;
     }
+
 
     /**
      * Function for user log out
@@ -137,37 +144,5 @@ class IndexController extends Controller
         return redirect()->route('dashboard')->withErrors(['msg' => 'Login details are not valid']);
 
     }
-
-
-    /**
-     * Function for product detail page
-     *
-     * @param $id
-     * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View
-     */
-    public function ProductDetails($id){
-        $product = Product::findOrFail($id);
-
-        $color_en         = $product->product_color_en;
-        $product_color_en = explode(',', $color_en);
-
-        $color_hin         = $product->product_color_hin;
-        $product_color_hin = explode(',', $color_hin);
-
-        $size_en         = $product->product_size_en;
-        $product_size_en = explode(',', $size_en);
-
-        $size_hin         = $product->product_size_hin;
-        $product_size_hin = explode(',', $size_hin);
-
-        $multiImag        = MultiImg::where('product_id',$id)->get();
-
-        $cat_id         = $product->category_id;
-        $relatedProduct = Product::where('category_id',$cat_id)->where('id','!=',$id)->orderBy('id','DESC')->get();
-
-        return view('frontend.product.product_details',compact('product','multiImag','product_color_en','product_color_hin','product_size_en','product_size_hin','relatedProduct'));
-
-    }
-
 
 }
