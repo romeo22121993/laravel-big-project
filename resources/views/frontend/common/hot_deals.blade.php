@@ -12,7 +12,7 @@
                     <div class="hot-deal-wrapper">
                         <div class="image"> <img src="{{ asset($product->product_thambnail) }}" alt=""> </div>
                         @php
-                        $amount = $product->selling_price - $product->discount_price;
+                        $amount   = $product->selling_price - $product->discount_price;
                         $discount = ($amount/$product->selling_price) * 100;
                         @endphp
 

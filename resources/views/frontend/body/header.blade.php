@@ -77,7 +77,6 @@ $categories    = \App\Models\Category::where('category_id', 0)->orderBy('categor
                         @endauth
                     </ul>
                 </div>
-                <!-- /.cnt-account -->
 
                 <div class="cnt-block">
                     <ul class="list-unstyled list-inline">
@@ -108,16 +107,11 @@ $categories    = \App\Models\Category::where('category_id', 0)->orderBy('categor
                             </ul>
                         </li>
                     </ul>
-                    <!-- /.list-unstyled -->
                 </div>
-                <!-- /.cnt-cart -->
                 <div class="clearfix"></div>
             </div>
-            <!-- /.header-top-inner -->
         </div>
-        <!-- /.container -->
     </div>
-    <!-- /.header-top -->
     <!-- ============================================== TOP MENU : END ============================================== -->
     <div class="main-header">
         <div class="container">
@@ -125,12 +119,9 @@ $categories    = \App\Models\Category::where('category_id', 0)->orderBy('categor
                 <div class="col-xs-12 col-sm-12 col-md-3 logo-holder">
                     <!-- ============================================================= LOGO ============================================================= -->
                     <div class="logo"> <a href="/"> <img src="{{ asset('frontend/assets/images/logo.png') }}" alt="logo"> </a> </div>
-                    <!-- /.logo -->
                     <!-- ============================================================= LOGO : END ============================================================= --> </div>
-                <!-- /.logo-holder -->
 
                 <div class="col-xs-12 col-sm-12 col-md-7 top-search-holder">
-                    <!-- /.contact-row -->
                     <!-- ============================================================= SEARCH AREA ============================================================= -->
                     <div class="search-area">
                         <form>
@@ -150,9 +141,8 @@ $categories    = \App\Models\Category::where('category_id', 0)->orderBy('categor
                                 <a class="search-button" href="#" ></a> </div>
                         </form>
                     </div>
-                    <!-- /.search-area -->
-                    <!-- ============================================================= SEARCH AREA : END ============================================================= --> </div>
-                <!-- /.top-search-holder -->
+                    <!-- ============================================================= SEARCH AREA : END ============================================================= -->
+                </div>
 
                 <div class="col-xs-12 col-sm-12 col-md-2 animate-dropdown top-cart-row">
                     <!-- ============================================================= SHOPPING CART DROPDOWN ============================================================= -->
@@ -181,7 +171,7 @@ $categories    = \App\Models\Category::where('category_id', 0)->orderBy('categor
                                 <div class="cart-item product-summary">
                                     <div class="row">
                                         <div class="col-xs-4">
-                                            <div class="image"> <a href="detail.html"><img src="assets/images/cart.jpg" alt=""></a> </div>
+                                            <div class="image"> <a href="detail.html"><img src="{{ asset('frontend/assets/images/cart.jpg') }}" alt=""></a> </div>
                                         </div>
                                         <div class="col-xs-7">
                                             <h3 class="name"><a href="index.php?page-detail">Simple Product</a></h3>
@@ -190,31 +180,20 @@ $categories    = \App\Models\Category::where('category_id', 0)->orderBy('categor
                                         <div class="col-xs-1 action"> <a href="#"><i class="fa fa-trash"></i></a> </div>
                                     </div>
                                 </div>
-                                <!-- /.cart-item -->
                                 <div class="clearfix"></div>
                                 <hr>
                                 <div class="clearfix cart-total">
                                     <div class="pull-right"> <span class="text">Sub Total :</span><span class='price'>$600.00</span> </div>
                                     <div class="clearfix"></div>
-                                    <a href="checkout.html" class="btn btn-upper btn-primary btn-block m-t-20">Checkout</a> </div>
-                                <!-- /.cart-total-->
-
+                                    <a href="checkout.html" class="btn btn-upper btn-primary btn-block m-t-20">Checkout</a>
+                                </div>
                             </li>
                         </ul>
-                        <!-- /.dropdown-menu-->
                     </div>
-                    <!-- /.dropdown-cart -->
-
                     <!-- ============================================================= SHOPPING CART DROPDOWN : END============================================================= --> </div>
-                <!-- /.top-cart-row -->
             </div>
-            <!-- /.row -->
-
         </div>
-        <!-- /.container -->
-
     </div>
-    <!-- /.main-header -->
 
     <!-- ============================================== NAVBAR ============================================== -->
     <div class="header-nav animate-dropdown">
@@ -239,27 +218,38 @@ $categories    = \App\Models\Category::where('category_id', 0)->orderBy('categor
                                             <div class="yamm-content ">
                                                 <div class="row">
                                                     @php
-                                                    $subcategories = App\Models\Category::where('category_id', $category->id)->orderBy('category_name_en','ASC')->get();
+                                                    $subcategories = App\Models\Category::where('category_id', $category->id)->orderBy('category_name_en','ASC')->where('subcategory_id',0)->get();
                                                     @endphp
                                                     @foreach($subcategories as $subcategory)
-                                                        <div class="col-xs-12 col-sm-6 col-md-2 col-menu">
-                                                        <h2 class="title">@if(session()->get('language') == 'hindi') {{ $subcategory->category_name_hin }} @else {{ $subcategory->category_name_en }} @endif</h2>
                                                         @php
-                                                            $subsubcategories = App\Models\Category::where('subcategory_id',$subcategory->id)->orderBy('category_name_en','ASC')->get();
+                                                            $link = (session()->get('language') == 'hindi') ? $subcategory->category_slug_hin : $subcategory->category_slug_en;
                                                         @endphp
-                                                        @foreach($subsubcategories as $subsubcategory)
-                                                        <ul class="links">
-                                                            <li>
-                                                                <a href="{{ url('subsubcategory/product/'.$category->id.'/'.$subsubcategory->category_slug_en ) }}">
-                                                                    @if(session()->get('language') == 'hindi') {{ $subsubcategory->category_name_hin }} @else {{ $subsubcategory->category_name_en }} @endif
+                                                        <div class="col-xs-12 col-sm-6 col-md-2 col-menu">
+                                                            <h2 class="title">
+                                                                <a href="/category/{{ $subcategory->id }}/{{ $link }}" style="padding: 0;">
+                                                                    @if(session()->get('language') == 'hindi') {{ $subcategory->category_name_hin }} @else {{ $subcategory->category_name_en }} @endif
                                                                 </a>
-                                                            </li>
-                                                        </ul>
-                                                        @endforeach
-                                                    </div>
+                                                            </h2>
+                                                            @php
+                                                                $subsubcategories = App\Models\Category::where('subcategory_id',$subcategory->id)->orderBy('category_name_en','ASC')->get();
+                                                            @endphp
+                                                            @foreach($subsubcategories as $subsubcategory)
+                                                                @php
+                                                                    $link = (session()->get('language') == 'hindi') ? $subsubcategory->category_slug_hin  :  $subsubcategory->category_slug_en;
+                                                                @endphp
+                                                                <ul class="links">
+                                                                    <li>
+                                                                        <a href="/subcategory/{{ $subsubcategory->id }}/{{ $link }}">
+                                                                            @if(session()->get('language') == 'hindi') {{ $subsubcategory->category_name_hin }} @else {{ $subsubcategory->category_name_en }} @endif
+                                                                        </a>
+                                                                    </li>
+                                                                </ul>
+                                                            @endforeach
+                                                        </div>
                                                     @endforeach
-                                                    <div class="col-xs-12 col-sm-6 col-md-4 col-menu banner-image"> <img class="img-responsive" src="assets/images/banners/top-menu-banner.jpg" alt=""> </div>
-                                                    <!-- /.yamm-content -->
+                                                    <div class="col-xs-12 col-sm-6 col-md-4 col-menu banner-image">
+                                                        <img class="img-responsive" src="{{ asset('frontend/assets/images/banners/top-menu-banner.jpg') }}" alt="">
+                                                    </div>
                                                 </div>
                                             </div>
                                         </li>
@@ -267,22 +257,14 @@ $categories    = \App\Models\Category::where('category_id', 0)->orderBy('categor
                                 </li>
                                 @endforeach
                             </ul>
-                            <!-- /.navbar-nav -->
                             <div class="clearfix"></div>
                         </div>
-                        <!-- /.nav-outer -->
                     </div>
-                    <!-- /.navbar-collapse -->
-
                 </div>
-                <!-- /.nav-bg-class -->
             </div>
-            <!-- /.navbar-default -->
         </div>
-        <!-- /.container-class -->
 
     </div>
-    <!-- /.header-nav -->
     <!-- ============================================== NAVBAR : END ============================================== -->
 
 </header>

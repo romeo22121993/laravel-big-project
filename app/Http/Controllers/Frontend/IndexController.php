@@ -41,12 +41,13 @@ class IndexController extends Controller
         $special_deals = Product::where('special_deals', 1)->orderBy('id', 'DESC')->limit(3)->get();
 
         $tags_en  = Product::groupBy('product_tags_en')->select('product_tags_en')->get();
+        $chosen_tag  = '';
         $tags_hin = Product::groupBy('product_tags_hin')->select('product_tags_hin')->get();
 
         $tags_hin = $this->getDistinctTags( $tags_hin, 'hin' );
         $tags_en  = $this->getDistinctTags( $tags_en, 'en' );
 
-        return view('frontend.index', compact( 'categories', 'subcategory', 'subsubcategory', 'sliders', 'products', 'featured', 'hot_deals', 'special_offer', 'special_deals', 'tags_en', 'tags_hin' ));
+        return view('frontend.index', compact( 'categories', 'subcategory', 'subsubcategory', 'sliders', 'products', 'featured', 'hot_deals', 'special_offer', 'special_deals', 'tags_en','chosen_tag' , 'tags_hin' ));
     }
 
     /**

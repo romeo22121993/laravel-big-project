@@ -12,20 +12,28 @@
                         <li class="yamm-content">
                             <div class="row">
                                 @php
-                                    $subcategories = App\Models\Category::where('category_id', $category->id)->orderBy('category_name_en','ASC')->get();
+                                    $subcategories = App\Models\Category::where('category_id', $category->id)->orderBy('category_name_en','ASC')->where('subcategory_id',0)->get();
                                 @endphp
                                 @foreach($subcategories as $subcategory)
+                                    @php
+                                        $link = (session()->get('language') == 'hindi') ? $subcategory->category_slug_hin : $subcategory->category_slug_en;
+                                    @endphp
                                     <div class="col-sm-12 col-md-3">
                                         <h2 class="title">
-                                            @if(session()->get('language') == 'hindi') {{ $subcategory->category_name_hin }} @else {{ $subcategory->category_name_en }} @endif
+                                            <a href="/category/{{  $subcategory->id }}/{{ $link }}" style="padding: 0;">
+                                                @if(session()->get('language') == 'hindi') {{ $subcategory->category_name_hin }} @else {{ $subcategory->category_name_en }} @endif
+                                            </a>
                                         </h2>
                                         @php
                                             $subsubcategories = App\Models\Category::where('subcategory_id',$subcategory->id)->orderBy('category_name_en','ASC')->get();
                                         @endphp
                                         @foreach($subsubcategories as $subsubcategory)
+                                            @php
+                                                $link = (session()->get('language') == 'hindi') ? $subsubcategory->category_slug_hin  :  $subsubcategory->category_slug_en;
+                                            @endphp
                                             <ul class="links list-unstyled">
                                                 <li>
-                                                    <a href="#">
+                                                    <a href="/subcategory/{{ $subsubcategory->id }}/{{ $link }}">
                                                         @if(session()->get('language') == 'hindi') {{ $subsubcategory->category_name_hin }} @else {{ $subsubcategory->category_name_en }} @endif
                                                     </a>
                                                 </li>

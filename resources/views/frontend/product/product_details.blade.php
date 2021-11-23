@@ -10,13 +10,14 @@
         <div class="container">
             <div class="breadcrumb-inner">
                 <ul class="list-inline list-unstyled">
-                    <li><a href="#">Home</a></li>
-                    <li><a href="#">Clothing</a></li>
-                    <li class='active'>Floral Print Buttoned</li>
+                    <li><a href="#">{{ $product->category_id }}</a></li>
+                    <li><a href="#">{{ $product->subcategory_id }}</a></li>
+                    <li><a href="#">{{ $product->subsubcategory_id }}</a></li>
+                    <li class='active'>{{ $product->product_name_en }}</li>
                 </ul>
-            </div><!-- /.breadcrumb-inner -->
-        </div><!-- /.container -->
-    </div><!-- /.breadcrumb -->
+            </div>
+        </div>
+    </div>
 
     <div class="body-content outer-top-xs">
     <div class='container'>
@@ -285,7 +286,7 @@
                                         <input type="hidden" id="product_id" value="{{ $product->id }}" min="1">
 
                                         <div class="col-sm-7">
-                                            <button type="submit" onclick="addToCart()" class="btn btn-primary"><i class="fa fa-shopping-cart inner-right-vs"></i> ADD TO CART</button>
+                                            <button type="submit"  class="btn btn-primary add_to_cart_btn"><i class="fa fa-shopping-cart inner-right-vs"></i> ADD TO CART</button>
                                         </div>
 
                                     </div><!-- /.row -->
@@ -506,7 +507,7 @@
 
                 <!-- ===== ======= UPSELL PRODUCTS ==== ========== -->
                 <section class="section featured-product wow fadeInUp">
-                    <h3 class="section-title">Releted products</h3>
+                    <h3 class="section-title">Related products</h3>
                     <div class="owl-carousel home-owl-carousel upsell-product custom-carousel owl-theme outer-top-xs">
 
                         @foreach($relatedProduct as $product)

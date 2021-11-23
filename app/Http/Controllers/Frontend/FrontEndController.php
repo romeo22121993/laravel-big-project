@@ -24,7 +24,6 @@ class FrontEndController extends Controller
         $this->index_controller = new IndexController();
     }
 
-
     /**
      * Function showing products by tags
      *
@@ -48,9 +47,75 @@ class FrontEndController extends Controller
         $tags_hin =  $this->index_controller->getDistinctTags( $tags_hin, 'hin' );
         $tags_en  =  $this->index_controller->getDistinctTags( $tags_en, 'en' );
 
-
         return view('frontend.product.tags_view',compact('products','categories', 'tags_en', 'tags_hin', 'chosen_tag'));
     }
+
+
+    /**
+     * Category page for products functionality
+     *
+     * @param Request $request
+     * @param $slug
+     * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View|\Illuminate\Http\JsonResponse
+     */
+    public function SubCatWiseProduct(Request $request, $subcat_id, $slug){
+
+        $products = Product::where('status',1)->where('subcategory_id', $subcat_id)->orderBy('id','DESC')->paginate(1);
+
+        $categories = Category::where('category_id', 0)->orderBy('category_name_en', 'ASC')->get();
+
+        $tags_en  = Product::groupBy('product_tags_en')->select('product_tags_en')->get();
+        $tags_hin = Product::groupBy('product_tags_hin')->select('product_tags_hin')->get();
+
+        $tags_hin =  $this->index_controller->getDistinctTags( $tags_hin, 'hin' );
+        $tags_en  =  $this->index_controller->getDistinctTags( $tags_en, 'en' );
+        $chosen_tag  = '';
+
+//        $breadsubcat = Category::with(['category'])->where('id',$subcat_id)->get();
+        $breadsubcat = 'ff';
+
+        ///  Load More Product with Ajax
+        ///
+         /*
+        if ($request->ajax()) {
+            $grid_view = view('frontend.product.grid_view_product',compact('products'))->render();
+
+            $list_view = view('frontend.product.list_view_product',compact('products'))->render();
+            return response()->json(['grid_view' => $grid_view,'list_view',$list_view]);
+
+        }
+         */
+        ///  End Load More Product with Ajax
+
+        return view('frontend.product.subcategory_view',compact('products','categories','breadsubcat', 'tags_en', 'tags_hin', 'chosen_tag'));
+
+    }
+
+    /**
+     * Function subsubcategories product list
+     *
+     * @param $subsubcat_id
+     * @param $slug
+     * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View
+     */
+    public function SubSubCatWiseProduct( Request $request, $subsubcat_id, $slug){
+        $products = Product::where('status',1)->where('subsubcategory_id',$subsubcat_id)->orderBy('id','DESC')->paginate(1);
+
+        $categories = Category::where('category_id', 0)->orderBy('category_name_en', 'ASC')->get();
+
+        $tags_en  = Product::groupBy('product_tags_en')->select('product_tags_en')->get();
+        $tags_hin = Product::groupBy('product_tags_hin')->select('product_tags_hin')->get();
+
+        $tags_hin =  $this->index_controller->getDistinctTags( $tags_hin, 'hin' );
+        $tags_en  =  $this->index_controller->getDistinctTags( $tags_en, 'en' );
+        $chosen_tag  = '';
+
+        $breadsubsubcat = 'gg';
+
+        return view('frontend.product.subcategory_view',compact('products','categories','breadsubsubcat', 'tags_en', 'tags_hin', 'chosen_tag' ));
+
+    }
+
 
     /**
      * Function for product detail page
@@ -94,5 +159,29 @@ class FrontEndController extends Controller
                 'relatedProduct',  'featured', 'hot_deals', 'special_offer', 'special_deals', 'tags_en', 'tags_hin' )
         );
     }
+
+
+    /**
+     * Function getting ajax data by product id
+     *
+     * @param $id
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function ProductViewAjax($id){
+        $product = Product::with('category','brand')->findOrFail($id);
+
+        $color         = $product->product_color_en;
+        $product_color = explode(',', $color);
+
+        $size         = $product->product_size_en;
+        $product_size = explode(',', $size);
+
+        return response()->json(array(
+            'product' => $product,
+            'color'   => $product_color,
+            'size'    => $product_size,
+        ));
+
+    } // end method
 
 }

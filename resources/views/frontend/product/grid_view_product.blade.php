@@ -3,14 +3,14 @@
     <div class="products">
       <div class="product">
         <div class="product-image">
-          <div class="image"> <a href="{{ url('product/details/'.$product->id.'/'.$product->product_slug_en ) }}"><img  src="{{ asset($product->product_thambnail) }}" alt=""></a> </div>
+          <div class="image"> <a href="{{ url('product/details/'.$product->id ) }}"><img  src="{{ asset($product->product_thambnail) }}" alt=""></a> </div>
           <!-- /.image -->
 
            @php
         $amount = $product->selling_price - $product->discount_price;
         $discount = ($amount/$product->selling_price) * 100;
-        @endphp     
-          
+        @endphp
+
           <div>
             @if ($product->discount_price == NULL)
             <div class="tag new"><span>new</span></div>
@@ -22,9 +22,9 @@
 
         </div>
         <!-- /.product-image -->
-        
+
         <div class="product-info text-left">
-          <h3 class="name"><a href="{{ url('product/details/'.$product->id.'/'.$product->product_slug_en ) }}">
+          <h3 class="name"><a href="{{ url('product/details/'.$product->id ) }}">
           	@if(session()->get('language') == 'hindi') {{ $product->product_name_hin }} @else {{ $product->product_name_en }} @endif</a></h3>
           <div class="rating rateit-small"></div>
           <div class="description"></div>
@@ -40,9 +40,9 @@
 
 
 
-          
-          <!-- /.product-price --> 
-          
+
+          <!-- /.product-price -->
+
         </div>
         <!-- /.product-info -->
         <div class="cart clearfix animate-effect">
@@ -56,15 +56,14 @@
               <li class="lnk"> <a class="add-to-cart" href="detail.html" title="Compare"> <i class="fa fa-signal"></i> </a> </li>
             </ul>
           </div>
-          <!-- /.action --> 
+          <!-- /.action -->
         </div>
-        <!-- /.cart --> 
+        <!-- /.cart -->
       </div>
-      <!-- /.product --> 
-      
+      <!-- /.product -->
+
     </div>
-    <!-- /.products --> 
+    <!-- /.products -->
   </div>
   <!-- /.item -->
   @endforeach
-               

@@ -22,7 +22,7 @@ use App\Http\Controllers\Backend\SliderController;
 use App\Http\Controllers\Frontend\IndexController;
 use App\Http\Controllers\Frontend\FrontEndController;
 use App\Http\Controllers\Frontend\LanguageController;
-//use App\Http\Controllers\Frontend\CartController;
+use App\Http\Controllers\Frontend\CartController;
 //use App\Http\Controllers\Frontend\HomeBlogController;
 
 //use App\Http\Controllers\User\WishlistController;
@@ -70,6 +70,22 @@ Route::group(['middleware' => 'web'], function () {
             Route::get('/subcategory/{category_id}',        [CategoryController::class, 'GetSubCategory']);
             Route::get('/sub-subcategory/{subcategory_id}', [CategoryController::class, 'GetSubSubCategory']);
         });
+
+        // Product View Modal with Ajax
+        Route::get('/product/view/modal/{id}', [FrontEndController::class, 'ProductViewAjax']);
+
+        // Add to Cart Store Data
+        Route::post('/cart/data/store/{id}', [CartController::class, 'AddToCart']);
+
+        // Get Data from mini cart
+        Route::get('/product/mini/cart/',    [CartController::class, 'AddMiniCart']);
+
+        // Remove mini cart
+        Route::get('/minicart/product-remove/{rowId}', [CartController::class, 'RemoveMiniCart']);
+
+        // Add to Wishlist
+        Route::post('/add-to-wishlist/{product_id}', [CartController::class, 'AddToWishlist']);
+
     });
 
     // Frontend Product Details Page url
@@ -79,10 +95,10 @@ Route::group(['middleware' => 'web'], function () {
     Route::get('/product/tag/{tag}', [FrontEndController::class, 'TagWiseProduct']);
 
     // Frontend SubCategory wise Data
-    Route::get('/subcategory/product/{subcat_id}/{slug}', [FrontEndController::class, 'SubCatWiseProduct']);
+    Route::get('/category/{subcat_id}/{slug}', [FrontEndController::class, 'SubCatWiseProduct']);
 
     // Frontend Sub-SubCategory wise Data
-    Route::get('/subsubcategory/product/{subsubcat_id}/{slug}', [FrontEndController::class, 'SubSubCatWiseProduct']);
+    Route::get('/subcategory/{subsubcat_id}/{slug}', [FrontEndController::class, 'SubSubCatWiseProduct']);
 });
 
 Route::group(['prefix'=> 'admin'], function(){
@@ -182,21 +198,6 @@ Route::group(['prefix'=> 'user'], function(){
 });
 
 
-
-// Product View Modal with Ajax
-Route::get('/product/view/modal/{id}', [IndexController::class, 'ProductViewAjax']);
-
-// Add to Cart Store Data
-Route::post('/cart/data/store/{id}', [CartController::class, 'AddToCart']);
-
-// Get Data from mini cart
-Route::get('/product/mini/cart/', [CartController::class, 'AddMiniCart']);
-
-// Remove mini cart
-Route::get('/minicart/product-remove/{rowId}', [CartController::class, 'RemoveMiniCart']);
-
-// Add to Wishlist
-Route::post('/add-to-wishlist/{product_id}', [CartController::class, 'AddToWishlist']);
 
 /////////////////////  User Must Login  ////
 Route::group(['prefix'=>'user','middleware' => ['user','auth'],'namespace'=>'User'],function(){
