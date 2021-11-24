@@ -205,8 +205,8 @@
                                 </div>
                             </div>
 
-                            <!--            //////////////////// END Product Grid View  ////////////// -->
-                            <!--            //////////////////// Product List View Start ////////////// -->
+                            <!-- //////////////////// END Product Grid View  ////////////// -->
+                            <!-- //////////////////// Product List View Start ////////////// -->
                             <div class="tab-pane "  id="list-container">
                                 <div class="category-product" id="list_view_product">
                                     @include('frontend.product.list_view_product')
@@ -224,7 +224,7 @@
                     </div>
                 </div>
                 <div class="ajax-loadmore-product text-center" style="display: none;">
-                    <img src="{{ asset('frontend/assets/images/loader.svg') }}" style="width: 120px; height: 120px;">
+                    <img src="{{ asset('frontend/assets/images/loading.gif') }}" style="width: 120px; height: 120px;">
                 </div>
             </div>
 
@@ -232,16 +232,16 @@
             <div id="brands-carousel" class="logo-slider wow fadeInUp">
                 <div class="logo-slider-inner">
                     <div id="brand-slider" class="owl-carousel brand-slider custom-carousel owl-theme">
-                        <div class="item m-t-15"> <a href="#" class="image"> <img data-echo="assets/images/brands/brand1.png" src="assets/images/blank.gif" alt=""> </a> </div>
-                        <div class="item m-t-10"> <a href="#" class="image"> <img data-echo="assets/images/brands/brand2.png" src="assets/images/blank.gif" alt=""> </a> </div>
-                        <div class="item"> <a href="#" class="image"> <img data-echo="assets/images/brands/brand3.png" src="assets/images/blank.gif" alt=""> </a> </div>
-                        <div class="item"> <a href="#" class="image"> <img data-echo="assets/images/brands/brand4.png" src="assets/images/blank.gif" alt=""> </a> </div>
-                        <div class="item"> <a href="#" class="image"> <img data-echo="assets/images/brands/brand5.png" src="assets/images/blank.gif" alt=""> </a> </div>
-                        <div class="item"> <a href="#" class="image"> <img data-echo="assets/images/brands/brand6.png" src="assets/images/blank.gif" alt=""> </a> </div>
-                        <div class="item"> <a href="#" class="image"> <img data-echo="assets/images/brands/brand2.png" src="assets/images/blank.gif" alt=""> </a> </div>
-                        <div class="item"> <a href="#" class="image"> <img data-echo="assets/images/brands/brand4.png" src="assets/images/blank.gif" alt=""> </a> </div>
-                        <div class="item"> <a href="#" class="image"> <img data-echo="assets/images/brands/brand1.png" src="assets/images/blank.gif" alt=""> </a> </div>
-                        <div class="item"> <a href="#" class="image"> <img data-echo="assets/images/brands/brand5.png" src="assets/images/blank.gif" alt=""> </a> </div>
+                        <div class="item m-t-15"> <a href="#" class="image"> <img data-echo="{{ asset('frontend/assets/images/brands/brand1.png') }}" src="{{ asset('frontend/assets/images/blank.gif') }}" alt=""> </a> </div>
+                        <div class="item m-t-10"> <a href="#" class="image"> <img data-echo="{{ asset('frontend/assets/images/brands/brand2.png') }}" src="{{ asset('frontend/assets/images/blank.gif') }}" alt=""> </a> </div>
+                        <div class="item"> <a href="#" class="image"> <img data-echo="{{ asset('frontend/assets/images/brands/brand3.png') }}" src="{{ asset('frontend/assets/images/blank.gif') }}" alt=""> </a> </div>
+                        <div class="item"> <a href="#" class="image"> <img data-echo="{{ asset('frontend/assets/images/brands/brand4.png') }}" src="{{ asset('frontend/assets/images/blank.gif') }}" alt=""> </a> </div>
+                        <div class="item"> <a href="#" class="image"> <img data-echo="{{ asset('frontend/assets/images/brands/brand5.png') }}" src="{{ asset('frontend/assets/images/blank.gif') }}" alt=""> </a> </div>
+                        <div class="item"> <a href="#" class="image"> <img data-echo="{{ asset('frontend/assets/images/brands/brand6.png') }}" src="{{ asset('frontend/assets/images/blank.gif') }}" alt=""> </a> </div>
+                        <div class="item"> <a href="#" class="image"> <img data-echo="{{ asset('frontend/assets/images/brands/brand2.png') }}" src="{{ asset('frontend/assets/images/blank.gif') }}" alt=""> </a> </div>
+                        <div class="item"> <a href="#" class="image"> <img data-echo="{{ asset('frontend/assets/images/brands/brand4.png') }}" src="{{ asset('frontend/assets/images/blank.gif') }}" alt=""> </a> </div>
+                        <div class="item"> <a href="#" class="image"> <img data-echo="{{ asset('frontend/assets/images/brands/brand1.png') }}" src="{{ asset('frontend/assets/images/blank.gif') }}" alt=""> </a> </div>
+                        <div class="item"> <a href="#" class="image"> <img data-echo="{{ asset('frontend/assets/images/brands/brand5.png') }}" src="{{ asset('frontend/assets/images/blank.gif') }}" alt=""> </a> </div>
                     </div>
                 </div>
             </div>
@@ -249,46 +249,7 @@
         </div>
     </div>
 
-{{--    <script>--}}
-{{--    function loadmoreProduct(page){--}}
-{{--    $.ajax({--}}
-{{--    type: "get",--}}
-{{--    url: "?page="+page,--}}
-{{--    beforeSend: function(response){--}}
-{{--    --}}
-{{--    $('.ajax-loadmore-product').show();--}}
-{{--    }--}}
-{{--    --}}
-{{--    })--}}
-{{--    --}}
-{{--    --}}
-{{--    .done(function(data){--}}
-{{--    if (data.grid_view == " " || data.list_view == " ") {--}}
-{{--    return;--}}
-{{--    }--}}
-{{--    $('.ajax-loadmore-product').hide();--}}
-{{--    --}}
-{{--    $('#grid_view_product').append(data.grid_view);--}}
-{{--    $('#list_view_product').append(data.list_view);--}}
-{{--    })--}}
-{{--    --}}
-{{--    .fail(function(){--}}
-{{--    alert('Something Went Wrong');--}}
-{{--    })--}}
-{{--    --}}
-{{--    }--}}
-{{--    --}}
-{{--    --}}
-{{--    var page = 1;--}}
-{{--    $(window).scroll(function (){--}}
-{{--    if ($(window).scrollTop() +$(window).height() >= $(document).height()){--}}
-{{--    page ++;--}}
-{{--    loadmoreProduct(page);--}}
-{{--    }--}}
-{{--    --}}
-{{--    });--}}
-{{--    --}}
-{{--    </script> --}}
+
 
 
 @endsection

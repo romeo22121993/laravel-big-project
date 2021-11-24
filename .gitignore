@@ -4,3 +4,5 @@
 .env
 /public/upload/
 /public/upload/products/
+!/composer.json
+!/composer.lock

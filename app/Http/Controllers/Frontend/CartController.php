@@ -33,66 +33,59 @@ class CartController extends Controller
 
     	$product = Product::findOrFail($id);
 
-    	if ($product->discount_price == NULL) {
-    		Cart::add([
-    			'id' => $id,
-    			'name' => $request->product_name,
-    			'qty' => $request->quantity,
-    			'price' => $product->selling_price,
-    			'weight' => 1,
-    			'options' => [
-    				'image' => $product->product_thambnail,
-    				'color' => $request->color,
-    				'size' => $request->size,
-    			],
-    		]);
+        $price = ($product->discount_price == NULL) ? $product->selling_price : $product->discount_price;
 
-    		return response()->json(['success' => 'Successfully Added on Your Cart']);
+        Cart::add([
+            'id'     => $id,
+            'name'   => $request->product_name,
+            'qty'    => $request->quantity,
+            'price'  => $price,
+            'weight' => 1,
+            'options' => [
+                'image' => $product->product_thambnail,
+                'color' => $request->color,
+                'size'  => $request->size,
+            ],
+        ]);
 
-    	}else{
+        return response()->json(['success' => 'Successfully Added on Your Cart']);
 
-    		Cart::add([
-    			'id' => $id,
-    			'name' => $request->product_name,
-    			'qty' => $request->quantity,
-    			'price' => $product->discount_price,
-    			'weight' => 1,
-    			'options' => [
-    				'image' => $product->product_thambnail,
-    				'color' => $request->color,
-    				'size' => $request->size,
-    			],
-    		]);
-    		return response()->json(['success' => 'Successfully Added on Your Cart']);
-    	}
-
-    } // end mehtod
+    }
 
 
-    // Mini Cart Section
+    /**
+     * Function getting cart details data
+     *
+     * @return \Illuminate\Http\JsonResponse
+     */
     public function AddMiniCart(){
 
-    	$carts = Cart::content();
-    	$cartQty = Cart::count();
+    	$carts     = Cart::content();
+    	$cartQty   = Cart::count();
     	$cartTotal = Cart::total();
 
+        $cartTotal = str_replace( ',', '', $cartTotal);
+        $cartQty = str_replace( ',', '', $cartQty);
+
     	return response()->json(array(
-    		'carts' => $carts,
-    		'cartQty' => $cartQty,
-    		'cartTotal' => round($cartTotal),
-
+    		'carts'     => $carts,
+    		'cartQty'   => $cartQty,
+    		'cartTotal' => $cartTotal,
     	));
-    } // end method
+    }
 
-
-/// remove mini cart
+    /**
+     * Function removing mini cart
+     *
+     * @param $rowId
+     * @return \Illuminate\Http\JsonResponse
+     */
     public function RemoveMiniCart($rowId){
     	Cart::remove($rowId);
     	return response()->json(['success' => 'Product Remove from Cart']);
+    }
 
-    } // end mehtod
-
-
+    /*
     // add to wishlist mehtod
 
     public function AddToWishlist(Request $request, $product_id){
@@ -176,7 +169,6 @@ class CartController extends Controller
     }
 
 
-
  // Checkout Method
     public function CheckoutCreate(){
 
@@ -200,8 +192,6 @@ class CartController extends Controller
         return redirect()->to('/')->with($notification);
 
             }
-
-
         }else{
 
              $notification = array(
@@ -215,9 +205,6 @@ class CartController extends Controller
 
     } // end method
 
-
-
-
-
+    */
 
 }

@@ -11,18 +11,23 @@ jQuery(document).ready(function() {
      * Function for products
      *
      */
-
     $(".add_to_cart_btn, .addToCartBtn").on("click", function ( e ) {
         e.preventDefault();
         addToCart();
     })
-
 
     $(".productViewBtn").on("click", function ( e ) {
         e.preventDefault();
         let id = $(this).attr('id');
         console.log( 'id', id );
         productView(id);
+    })
+
+    $(document).on("click",  ".miniCartRemove", function ( e ) {
+        console.log('from here');
+        e.preventDefault();
+        let id = $(this).attr('id');
+        miniCartRemove(id);
     })
 
     /**
@@ -136,9 +141,7 @@ jQuery(document).ready(function() {
                         type: 'error',
                         title: data.error
                     })
-
                 }
-                // End Message
             }
         })
 
@@ -151,11 +154,12 @@ jQuery(document).ready(function() {
     function miniCart(){
         $.ajax({
             type: 'GET',
-            url: '/product/mini/cart',
+            url: '/ajax/product/mini/cart',
             dataType:'json',
             success:function(response){
 
                 $('span[id="cartSubTotal"]').text(response.cartTotal);
+                $('span[id="cartSubQut"]').text(response.cartQty);
                 $('#cartQty').text(response.cartQty);
                 var miniCart = ""
 
@@ -171,7 +175,7 @@ jQuery(document).ready(function() {
                                     <div class="price"> ${value.price} * ${value.qty} </div>
                                 </div>
                                 <div class="col-xs-1 action">
-                                    <button type="submit" id="${value.rowId}" onclick="miniCartRemove(this.id)"><i class="fa fa-trash"></i></button>
+                                    <button type="submit" class="miniCartRemove" id="${value.rowId}" onclick="miniCartRemove(this.id)"><i class="fa fa-trash"></i></button>
                                 </div>
                             </div>
                         </div>
@@ -186,12 +190,17 @@ jQuery(document).ready(function() {
         })
 
     }
+    miniCart()
 
-    /// mini cart remove Start
+    /**
+     * Removing mini cart function
+     *
+     * @param rowId
+     */
     function miniCartRemove(rowId){
         $.ajax({
             type: 'GET',
-            url: '/minicart/product-remove/'+rowId,
+            url: '/ajax/minicart/product-remove/'+rowId,
             dataType:'json',
             success:function(data){
                 miniCart();
@@ -217,14 +226,46 @@ jQuery(document).ready(function() {
                     })
 
                 }
-
-                // End Message
-
             }
         });
 
     }
 
     //  end mini cart remove
+    function loadmoreProduct(page){
+        $.ajax({
+            type: "get",
+            url: "?page="+page,
+            beforeSend: function(response){
+                $('.ajax-loadmore-product').show();
+            }
+        })
+
+
+        .done(function(data){
+            if (data.grid_view == " " || data.list_view == " ") {
+            return;
+            }
+            $('.ajax-loadmore-product').hide();
+
+            $('#grid_view_product').append(data.grid_view);
+            $('#list_view_product').append(data.list_view);
+        })
+
+        .fail(function(){
+            alert('Something Went Wrong');
+        })
+
+    }
+
+    var page = 1;
+    $(window).scroll(function (){
+        if ($(window).scrollTop() +$(window).height() >= $(document).height()){
+            page ++;
+            loadmoreProduct(page);
+        }
+
+    });
+
 
 })

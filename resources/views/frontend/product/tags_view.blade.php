@@ -232,7 +232,7 @@
                                                             <div class="action">
                                                                 <ul class="list-unstyled">
                                                                     <li class="add-cart-button btn-group">
-                                                                        <button class="btn btn-primary icon" data-toggle="dropdown" type="button"> <i class="fa fa-shopping-cart"></i> </button>
+                                                                        <button class="btn btn-primary icon productViewBtn" id="{{ $product->id }}" data-toggle="modal" data-target="#exampleModal" type="button"> <i class="fa fa-shopping-cart"></i> </button>
                                                                         <button class="btn btn-primary cart-btn" type="button">Add to cart</button>
                                                                     </li>
                                                                     <li class="lnk wishlist">
@@ -291,7 +291,7 @@
                                                                     <div class="action">
                                                                         <ul class="list-unstyled">
                                                                             <li class="add-cart-button btn-group">
-                                                                                <button class="btn btn-primary icon" data-toggle="dropdown" type="button"> <i class="fa fa-shopping-cart"></i> </button>
+                                                                                <button class="btn btn-primary icon productViewBtn" id="{{ $product->id }}" data-toggle="modal" data-target="#exampleModal" type="button"> <i class="fa fa-shopping-cart"></i> </button>
                                                                                 <button class="btn btn-primary cart-btn" type="button">Add to cart</button>
                                                                             </li>
                                                                             <li class="lnk wishlist">
@@ -347,46 +347,46 @@
                     <div id="brand-slider" class="owl-carousel brand-slider custom-carousel owl-theme">
                         <div class="item m-t-15">
                             <a href="#" class="image">
-                                <img data-echo="assets/images/brands/brand1.png" src="assets/images/blank.gif" alt="">
+                                <img data-echo="{{ asset('frontend/assets/images/brands/brand1.png') }}" src="{{ asset('frontend/assets/images/blank.gif') }}" alt="">
                             </a>
                         </div>
 
                         <div class="item m-t-10">
                             <a href="#" class="image">
-                                <img data-echo="assets/images/brands/brand2.png" src="assets/images/blank.gif" alt="">
+                                <img data-echo="{{ asset('frontend/assets/images/brands/brand2.png') }}" src="{{ asset('frontend/assets/images/blank.gif') }}" alt="">
                             </a>
                         </div>
 
                         <div class="item">
-                            <a href="#" class="image"> <img data-echo="assets/images/brands/brand3.png" src="assets/images/blank.gif" alt=""> </a>
+                            <a href="#" class="image"> <img data-echo="{{ asset('frontend/assets/images/brands/brand3.png') }}" src="{{ asset('frontend/assets/images/blank.gif') }}" alt=""> </a>
                         </div>
 
                         <div class="item">
-                            <a href="#" class="image"> <img data-echo="assets/images/brands/brand4.png" src="assets/images/blank.gif" alt=""> </a>
+                            <a href="#" class="image"> <img data-echo="{{ asset('frontend/assets/images/brands/brand4.png') }}" src="{{ asset('frontend/assets/images/blank.gif') }}" alt=""> </a>
                         </div>
 
                         <div class="item">
-                            <a href="#" class="image"> <img data-echo="assets/images/brands/brand5.png" src="assets/images/blank.gif" alt=""> </a>
+                            <a href="#" class="image"> <img data-echo="{{ asset('frontend/assets/images/brands/brand5.png') }}" src="{{ asset('frontend/assets/images/blank.gif') }}" alt=""> </a>
                         </div>
 
                         <div class="item">
-                            <a href="#" class="image"> <img data-echo="assets/images/brands/brand6.png" src="assets/images/blank.gif" alt=""> </a>
+                            <a href="#" class="image"> <img data-echo="{{ asset('frontend/assets/images/brands/brand6.png') }}" src="{{ asset('frontend/assets/images/blank.gif') }}" alt=""> </a>
                         </div>
 
                         <div class="item">
-                            <a href="#" class="image"> <img data-echo="assets/images/brands/brand2.png" src="assets/images/blank.gif" alt=""> </a>
+                            <a href="#" class="image"> <img data-echo="{{ asset('frontend/assets/images/brands/brand2.png') }}" src="{{ asset('frontend/assets/images/blank.gif') }}" alt=""> </a>
                         </div>
 
                         <div class="item">
-                            <a href="#" class="image"> <img data-echo="assets/images/brands/brand4.png" src="assets/images/blank.gif" alt=""> </a>
+                            <a href="#" class="image"> <img data-echo="{{ asset('frontend/assets/images/brands/brand4.png') }}" src="{{ asset('frontend/assets/images/blank.gif') }}" alt=""> </a>
                         </div>
 
                         <div class="item">
-                            <a href="#" class="image"> <img data-echo="assets/images/brands/brand1.png" src="assets/images/blank.gif" alt=""> </a>
+                            <a href="#" class="image"> <img data-echo="{{ asset('frontend/assets/images/brands/brand1.png') }}" src="{{ asset('frontend/assets/images/blank.gif') }}" alt=""> </a>
                         </div>
 
                         <div class="item">
-                            <a href="#" class="image"> <img data-echo="assets/images/brands/brand5.png" src="assets/images/blank.gif" alt=""> </a>
+                            <a href="#" class="image"> <img data-echo="{{ asset('frontend/assets/images/brands/brand5.png') }}" src="{{ asset('frontend/assets/images/blank.gif') }}" alt=""> </a>
                         </div>
                     </div>
                 </div>

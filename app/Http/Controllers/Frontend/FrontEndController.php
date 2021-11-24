@@ -75,7 +75,6 @@ class FrontEndController extends Controller
         $breadsubcat = 'ff';
 
         ///  Load More Product with Ajax
-        ///
          /*
         if ($request->ajax()) {
             $grid_view = view('frontend.product.grid_view_product',compact('products'))->render();

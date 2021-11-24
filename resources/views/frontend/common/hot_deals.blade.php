@@ -42,7 +42,7 @@
 
                     <div class="product-info text-left m-t-20">
                         <h3 class="name">
-                            <a href="{{ url('products/details/'.$product->id ) }}">
+                            <a href="{{ url('product/details/'.$product->id ) }}">
                                 @if(session()->get('language') == 'hindi') {{ $product->product_name_hin }} @else {{ $product->product_name_en }} @endif
                             </a>
                         </h3>
@@ -65,7 +65,7 @@
                     <div class="cart clearfix animate-effect">
                         <div class="action">
                             <div class="add-cart-button btn-group">
-                                <button class="btn btn-primary icon" data-toggle="dropdown" type="button"> <i class="fa fa-shopping-cart"></i> </button>
+                                <button class="btn btn-primary icon addToCartBtn" data-toggle="dropdown" type="button"> <i class="fa fa-shopping-cart"></i> </button>
                                 <button class="btn btn-primary cart-btn" type="button">Add to cart</button>
                             </div>
                         </div>
