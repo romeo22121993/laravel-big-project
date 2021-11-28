@@ -1,7 +1,6 @@
 @php
   $prefix = Request::route()->getPrefix();
   $route  = Route::current()->getName();
-
 @endphp
 <aside class="main-sidebar">
     <!-- sidebar-->
@@ -10,7 +9,6 @@
         <div class="user-profile">
             <div class="ulogo">
                 <a href="{{ route('home') }}">
-                    <!-- logo for regular state and mobile devices -->
                     <div class="d-flex align-items-center justify-content-center">
                         <img src="{{ asset('backend/images/logo-dark.png') }}" alt="">
                         <h3><b>Sunny</b> Admin</h3>
@@ -82,6 +80,33 @@
                     <li class="{{ ($route == 'slider.manage')? 'active':'' }}"><a href="{{ route('slider.manage') }}"><i class="ti-more"></i>All Sliders</a></li>
                     <li class="{{ ($route == 'slider.add')? 'active':'' }}"><a href="{{ route('slider.manage') }}"><i class="ti-more"></i>Add Slider</a></li>
                     <li class="{{ ($route == 'slider.manage')? 'active':'' }}"><a href="{{ route('slider.manage') }}"><i class="ti-more"></i>Manage Sliders</a></li>
+                </ul>
+            </li>
+
+            <li class="treeview {{ ($prefix == 'admin/coupons')?'active':'' }}  ">
+                <a href="#">
+                    <i data-feather="mail"></i> <span>Coupons</span>
+                    <span class="pull-right-container">
+                        <i class="fa fa-angle-right pull-right"></i>
+                    </span>
+                </a>
+                <ul class="treeview-menu">
+                    <li class="{{ ($route == 'coupon.manage')? 'active':'' }}"><a href="{{ route('coupon.manage') }}"><i class="ti-more"></i>All Coupons</a></li>
+                    <li class="{{ ($route == 'coupon.add')? 'active':'' }}"><a href="{{ route('coupon.manage') }}"><i class="ti-more"></i>Add Coupon</a></li>
+                </ul>
+            </li>
+
+            <li class="treeview {{ ($prefix == 'admin/shipping')?'active':'' }}  ">
+                <a href="#">
+                    <i data-feather="mail"></i> <span>Shipping</span>
+                    <span class="pull-right-container">
+                        <i class="fa fa-angle-right pull-right"></i>
+                    </span>
+                </a>
+                <ul class="treeview-menu">
+                    <li class="{{ ($route == 'division.manage')? 'active':'' }}"><a href="{{ route('division.manage') }}"><i class="ti-more"></i>Shipping Division</a></li>
+                    <li class="{{ ($route == 'district.manage')? 'active':'' }}"><a href="{{ route('district.manage') }}"><i class="ti-more"></i>Shipping District</a></li>
+                    <li class="{{ ($route == 'state.manage')? 'active':'' }}"><a href="{{ route('state.manage') }}"><i class="ti-more"></i>Shipping State</a></li>
                 </ul>
             </li>
 

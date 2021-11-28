@@ -35,6 +35,8 @@ class CartController extends Controller
 
         $price = ($product->discount_price == NULL) ? $product->selling_price : $product->discount_price;
 
+        //ToDo : check color and size via adding to cart
+
         Cart::add([
             'id'     => $id,
             'name'   => $request->product_name,
@@ -65,7 +67,7 @@ class CartController extends Controller
     	$cartTotal = Cart::total();
 
         $cartTotal = str_replace( ',', '', $cartTotal);
-        $cartQty = str_replace( ',', '', $cartQty);
+        $cartQty   = str_replace( ',', '', $cartQty);
 
     	return response()->json(array(
     		'carts'     => $carts,

@@ -20,7 +20,7 @@ $categories    = \App\Models\Category::where('category_id', 0)->orderBy('categor
                             </a>
                         </li>
                         <li>
-                            <a href="#">
+                            <a href="{{ route('wishlist') }}">
                                 <i class="icon fa fa-heart"></i>
                                 @if(session()->get('language') == 'hindi')
                                     WishlistHindi
@@ -30,7 +30,7 @@ $categories    = \App\Models\Category::where('category_id', 0)->orderBy('categor
                             </a>
                         </li>
                         <li>
-                            <a href="#">
+                            <a href="{{ route('mycart') }}">
                                 <i class="icon fa fa-shopping-cart"></i>
                                 @if(session()->get('language') == 'hindi')
                                     My CartHindi
@@ -148,9 +148,11 @@ $categories    = \App\Models\Category::where('category_id', 0)->orderBy('categor
                     <!-- ============================================================= SHOPPING CART DROPDOWN ============================================================= -->
 
                     <div class="dropdown dropdown-cart">
-                        <a href="#" class="dropdown-toggle lnk-cart" data-toggle="dropdown">
+                        <a href="" class="dropdown-toggle lnk-cart" data-toggle="dropdown">
                             <div class="items-cart-inner">
-                                <div class="basket"> <i class="glyphicon glyphicon-shopping-cart"></i> </div>
+                                <div class="basket">
+                                    <i class="glyphicon glyphicon-shopping-cart"></i>
+                                </div>
                                 <div class="basket-item-count"><span class="count" id="cartQty"> </span></div>
                                 <div class="total-price-basket">
                                     <span class="lbl">
