@@ -121,7 +121,7 @@
                                                 <input type="text" class="form-control unicase-form-control text-input" placeholder="You Coupon.." id="coupon_name">
                                             </div>
                                             <div class="clearfix pull-right">
-                                                <button type="submit" class="btn-upper btn btn-primary" onclick="applyCoupon()">APPLY COUPON</button>
+                                                <button type="submit" class="btn-upper btn btn-primary applyCouponBtn">APPLY COUPON</button>
                                             </div>
                                         </td>
                                     </tr>

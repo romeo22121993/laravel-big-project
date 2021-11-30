@@ -426,7 +426,6 @@ jQuery(document).ready(function() {
             url: '/ajax/get-cart-product',
             dataType:'json',
             success:function(response){
-
                 var rows = ""
                 $.each(response.carts, function(key,value){
                     rows += `<tr>
@@ -520,20 +519,17 @@ jQuery(document).ready(function() {
             url: '/ajax/cart-remove/'+id,
             dataType:'json',
             success:function(data){
-                // couponCalculation();
-                // cart();
-                console.log('id', id);
+                couponCalculation();
+                cart();
 
                 cart_part()
                 miniCart();
-                // $('#couponField').show();
-                // $('#coupon_name').val('');
 
                 const Toast = Swal.mixin({
-                  toast: true,
-                  position: 'top-end',
-                  showConfirmButton: false,
-                  timer: 3000
+                    toast: true,
+                    position: 'top-end',
+                    showConfirmButton: false,
+                    timer: 3000
                 })
 
                 if ( $.isEmptyObject(data.error) ) {
@@ -567,8 +563,8 @@ jQuery(document).ready(function() {
             url: "/ajax/cart-increment/"+rowId,
             dataType:'json',
             success:function(data){
-                //couponCalculation();
-                //cart();
+                couponCalculation();
+                cart();
                 cart_part();
                 miniCart();
             }
@@ -588,8 +584,8 @@ jQuery(document).ready(function() {
             url: "/ajax/cart-decrement/"+rowId,
             dataType:'json',
             success:function(data){
-                // couponCalculation();
-                // cart();
+                couponCalculation();
+                cart();
                 cart_part();
                 miniCart();
             }
@@ -598,148 +594,267 @@ jQuery(document).ready(function() {
 
     // ---------- END CART Decrement -----///
 
-    /*
-    <!--  //////////////// =========== Coupon Apply Start ================= ////  -->
-    <script type="text/javascript">
-      function applyCoupon(){
+    //////////////// =========== Coupon Apply Start ================= ////  -->
+
+    $(".applyCouponBtn").on("click", function ( e ){
+        e.preventDefault();
+
+        applyCoupon();
+    })
+
+    $(document).on('click', '.couponRemoveBtn', function (e) {
+        e.preventDefault();
+        couponRemove();
+    })
+
+    /**
+     * Function applying coupon
+     *
+     */
+    function applyCoupon(){
         var coupon_name = $('#coupon_name').val();
         $.ajax({
             type: 'POST',
             dataType: 'json',
-            data: {coupon_name:coupon_name},
-            url: "{{ url('/coupon-apply') }}",
+            data: { coupon_name:coupon_name },
+            url: "/ajax/coupon-apply",
             success:function(data){
-                   couponCalculation();
-                   if (data.validity == true) {
-                    $('#couponField').hide();
-                   }
+                couponCalculation();
+                if ( data.validity == true ) {
+                   $('#couponField').hide();
+                }
 
-                 // Start Message
-                    const Toast = Swal.mixin({
-                          toast: true,
-                          position: 'top-end',
+                // Start Message
+                const Toast = Swal.mixin({
+                    toast: true,
+                    position: 'top-end',
+                    showConfirmButton: false,
+                    timer: 3000
+                })
 
-                          showConfirmButton: false,
-                          timer: 3000
-                        })
-                    if ($.isEmptyObject(data.error)) {
-                        Toast.fire({
-                            type: 'success',
-                            icon: 'success',
-                            title: data.success
-                        })
-
-                    }else{
-                        Toast.fire({
-                            type: 'error',
-                            icon: 'error',
-                            title: data.error
-                        })
-
-                    }
-
-                    // End Message
-
+                if ($.isEmptyObject(data.error)) {
+                    Toast.fire({
+                        type: 'success',
+                        icon: 'success',
+                        title: data.success
+                    })
+                } else {
+                    Toast.fire({
+                        type: 'error',
+                        icon: 'error',
+                        title: data.error
+                    })
+                }
             }
-
         })
-      }
+    }
 
-
-      function couponCalculation(){
+    /**
+     * Function coupon calculation
+     *
+     */
+    function couponCalculation(){
         $.ajax({
             type:'GET',
-            url: "{{ url('/coupon-calculation') }}",
+            url: "/ajax/coupon-calculation",
             dataType: 'json',
             success:function(data){
                 if (data.total) {
                     $('#couponCalField').html(
                         `<tr>
-                    <th>
-                        <div class="cart-sub-total">
-                            Subtotal<span class="inner-left-md">$ ${data.total}</span>
-                        </div>
-                        <div class="cart-grand-total">
-                            Grand Total<span class="inner-left-md">$ ${data.total}</span>
-                        </div>
-                    </th>
-                </tr>`
-                )
-
-                }else{
-
-                     $('#couponCalField').html(
+                            <th>
+                                <div class="cart-sub-total">
+                                    Subtotal<span class="inner-left-md">$ ${data.total.toFixed(2)}</span>
+                                </div>
+                                <div class="cart-grand-total">
+                                    Grand Total<span class="inner-left-md">$ ${data.total.toFixed(2)}</span>
+                                </div>
+                            </th>
+                        </tr>`
+                    )
+                }
+                else {
+                    $('#couponCalField').html(
                         `<tr>
-            <th>
-                <div class="cart-sub-total">
-                    Subtotal<span class="inner-left-md">$ ${data.subtotal}</span>
-                </div>
-                <div class="cart-sub-total">
-                    Coupon<span class="inner-left-md">$ ${data.coupon_name}</span>
-                    <button type="submit" onclick="couponRemove()"><i class="fa fa-times"></i>  </button>
-                </div>
+                            <th>
+                                <div class="cart-sub-total">
+                                    Subtotal<span class="inner-left-md">$ ${data.subtotal}</span>
+                                </div>
 
-                 <div class="cart-sub-total">
-                    Discount Amount<span class="inner-left-md">$ ${data.discount_amount}</span>
-                </div>
+                                <div class="cart-sub-total">
+                                    Coupon<span class="inner-left-md">$ ${data.coupon_name}</span>
+                                    <button type="submit" class="couponRemoveBtn"><i class="fa fa-times"></i>  </button>
+                                </div>
 
+                                <div class="cart-sub-total">
+                                    Discount Amount<span class="inner-left-md">$ ${data.discount_amount}</span>
+                                </div>
 
-                <div class="cart-grand-total">
-                    Grand Total<span class="inner-left-md">$ ${data.total_amount}</span>
-                </div>
-            </th>
-                </tr>`
-                )
-
+                                <div class="cart-grand-total">
+                                    Grand Total<span class="inner-left-md">$ ${data.total_amount}</span>
+                                </div>
+                            </th>
+                        </tr>`
+                    )
                 }
             }
-
         });
-      }
-     couponCalculation();
+    }
+    couponCalculation();
 
-       function couponRemove(){
+    /**
+     * Function removing of coupon
+     *
+     */
+    function couponRemove(){
+        $.ajax({
+            type:'GET',
+            url: "/ajax/coupon-remove",
+            dataType: 'json',
+            success:function(data){
+                couponCalculation();
+                $('#couponField').show();
+                $('#coupon_name').val('');
+
+                 // Start Message
+                const Toast = Swal.mixin({
+                  toast: true,
+                  position: 'top-end',
+                  showConfirmButton: false,
+                  timer: 3000
+                })
+
+                if ($.isEmptyObject(data.error)) {
+                    Toast.fire({
+                        type: 'success',
+                        icon: 'success',
+                        title: data.success
+                    })
+                }else{
+                    Toast.fire({
+                        type: 'error',
+                        icon: 'error',
+                        title: data.error
+                    })
+                }
+            }
+        });
+
+    }
+
+    /**
+     * Checkout page
+     *
+     */
+    $('select[name="division_id"]').on('change', function(){
+        let division_id = $(this).val();
+        if ( division_id ) {
             $.ajax({
-                type:'GET',
-                url: "{{ url('/coupon-remove') }}",
-                dataType: 'json',
-                success:function(data){
-                    couponCalculation();
-                    $('#couponField').show();
-                    $('#coupon_name').val('');
+                url: "/ajax/district-get/"+division_id,
+                type:"GET",
+                dataType:"json",
+                success:function(data) {
+                    $('select[name="state_id"]').empty();
+                    var d =$('select[name="district_id"]').empty();
+                    $.each(data, function(key, value){
+                        $('select[name="district_id"]').append('<option value="'+ value.id +'">' + value.district_name + '</option>');
+                    });
+                },
+            });
+        } else {
+            alert('danger');
+        }
+    });
+
+    $('select[name="district_id"]').on('change', function(){
+        let district_id = $(this).val();
+        if ( district_id ) {
+            $.ajax({
+                url: "/ajax/state-get/"+district_id,
+                type:"GET",
+                dataType:"json",
+                success:function(data) {
+                    console.log('data', data);
+                    let d = $('select[name="state_id"]').empty();
+                    $.each(data, function(key, value){
+                        $('select[name="state_id"]').append('<option value="'+ value.id +'">' + value.state_name + '</option>');
+                    });
+                },
+            });
+        } else {
+            alert('danger');
+        }
+    });
 
 
-                     // Start Message
-                    const Toast = Swal.mixin({
-                          toast: true,
-                          position: 'top-end',
+    /**
+     * Payments
+     */
+    if ( $(".stripe_page").length > 0 ) {
+        // Create a Stripe client.
+        var stripe = Stripe('pk_test_51IUTWzALc6pn5BvMAUegqRHV0AAokjG7ZuV6RWcj5rxB9KCAwamgtWpw9T4maGAe34WmDkD6LSn1Yge3nzex6gYk004pILHsNh');
+        // Create an instance of Elements.
+        var elements = stripe.elements();
+        // Custom styling can be passed to options when creating an Element.
+        // (Note that this demo uses a wider set of styles than the guide below.)
+        var style = {
+            base: {
+                color: '#32325d',
+                fontFamily: '"Helvetica Neue", Helvetica, sans-serif',
+                fontSmoothing: 'antialiased',
+                fontSize: '16px',
+                '::placeholder': {
+                    color: '#aab7c4'
+                }
+            },
+            invalid: {
+                color: '#fa755a',
+                iconColor: '#fa755a'
+            }
+        };
 
-                          showConfirmButton: false,
-                          timer: 3000
-                        })
-                    if ($.isEmptyObject(data.error)) {
-                        Toast.fire({
-                            type: 'success',
-                            icon: 'success',
-                            title: data.success
-                        })
+        // Create an instance of the card Element.
+        var card = elements.create('card', {style: style});
+        // Add an instance of the card Element into the `card-element` <div>.
+        card.mount('#card-element');
+        // Handle real-time validation errors from the card Element.
+        card.on('change', function (event) {
+            var displayError = document.getElementById('card-errors');
+            if (event.error) {
+                displayError.textContent = event.error.message;
+            } else {
+                displayError.textContent = '';
+            }
+        });
 
-                    }else{
-                        Toast.fire({
-                            type: 'error',
-                            icon: 'error',
-                            title: data.error
-                        })
-
-                    }
-
-                    // End Message
-
+        // Handle form submission.
+        var form = document.getElementById('payment-form');
+        form.addEventListener('submit', function (event) {
+            event.preventDefault();
+            stripe.createToken(card).then(function (result) {
+                if (result.error) {
+                    // Inform the user if there was an error.
+                    var errorElement = document.getElementById('card-errors');
+                    errorElement.textContent = result.error.message;
+                } else {
+                    // Send the token to your server.
+                    stripeTokenHandler(result.token);
                 }
             });
+        });
 
-         }
+        // Submit the form with the token ID.
+        function stripeTokenHandler(token) {
+            // Insert the token ID into the form so it gets submitted to the server
+            var form = document.getElementById('payment-form');
+            var hiddenInput = document.createElement('input');
+            hiddenInput.setAttribute('type', 'hidden');
+            hiddenInput.setAttribute('name', 'stripeToken');
+            hiddenInput.setAttribute('value', token.id);
+            form.appendChild(hiddenInput);
+            // Submit the form
+            form.submit();
+        }
+    }
 
-
-         */
 })

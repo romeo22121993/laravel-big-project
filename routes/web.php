@@ -12,7 +12,7 @@ use App\Http\Controllers\Backend\ProductController;
 use App\Http\Controllers\Backend\SliderController;
 use App\Http\Controllers\Backend\CouponController;
 use App\Http\Controllers\Backend\ShippingAreaController;
-//use App\Http\Controllers\Backend\OrderController;
+use App\Http\Controllers\Backend\AdminOrderController;
 //use App\Http\Controllers\Backend\ReportController;
 //use App\Http\Controllers\Backend\BlogController;
 //use App\Http\Controllers\Backend\SiteSettingController;
@@ -27,12 +27,11 @@ use App\Http\Controllers\Frontend\CartController;
 
 use App\Http\Controllers\User\WishlistController;
 use App\Http\Controllers\User\CartPageController;
-//use App\Http\Controllers\User\CheckoutController;
-//use App\Http\Controllers\User\StripeController;
-//use App\Http\Controllers\User\CashController;
+use App\Http\Controllers\User\CheckoutController;
+use App\Http\Controllers\User\StripeController;
+use App\Http\Controllers\User\CashController;
 //use App\Http\Controllers\User\ReviewController;
-//
-//use App\Http\Controllers\User\AllUserController;
+use App\Http\Controllers\User\UserOrderController;
 //
 //use App\Http\Controllers\Frontend\ShopController;
 /*
@@ -61,7 +60,11 @@ Route::group(['middleware' => 'web'], function () {
     Route::get('/language/english', [LanguageController::class, 'English'])->name('english.language');
 
     // My Cart Page All Routes
-    Route::get('/mycart', [CartPageController::class, 'MyCart'])->name('mycart');
+    Route::get('/mycart',           [CartController::class, 'MyCart'])->name('mycart');
+
+    // Checkout Routes
+    Route::get('/checkout',         [CheckoutController::class, 'Checkout'])->name('checkout');
+    Route::post('/checkout/store',  [CheckoutController::class, 'CheckoutStore'])->name('checkout.store');
 
     // Ajax requests
     Route::group(['prefix'=> 'ajax'], function(){
@@ -92,15 +95,32 @@ Route::group(['middleware' => 'web'], function () {
 
         Route::get('/wishlist-remove/{id}', [WishlistController::class, 'RemoveWishlistProduct']);
 
-        Route::get('/get-cart-product',    [CartPageController::class, 'GetCartProduct']);
+        Route::get('/get-cart-product',    [CartController::class, 'GetCartProduct']);
 
-        Route::get('/cart-remove/{rowId}', [CartPageController::class, 'RemoveCartProduct']);
+        Route::get('/cart-remove/{rowId}', [CartController::class, 'RemoveCartProduct']);
 
-        Route::get('/cart-increment/{rowId}', [CartPageController::class, 'CartIncrement']);
+        Route::get('/cart-increment/{rowId}', [CartController::class, 'CartIncrement']);
 
-        Route::get('/cart-decrement/{rowId}', [CartPageController::class, 'CartDecrement']);
+        Route::get('/cart-decrement/{rowId}', [CartController::class, 'CartDecrement']);
+
+        // Frontend Coupon Option
+        Route::post('/coupon-apply',      [CartController::class, 'CouponApply']);
+        Route::get('/coupon-calculation', [CartController::class, 'CouponCalculation']);
+        Route::get('/coupon-remove',      [CartController::class, 'CouponRemove']);
+
+        // Checkout Functions
+        Route::get('/district-get/{division_id}', [CheckoutController::class, 'DistrictGetAjax']);
+        Route::get('/state-get/{district_id}',    [CheckoutController::class, 'StateGetAjax']);
 
     });
+
+    /**
+     * Stripe
+     */
+    Route::post('/stripe/order', [StripeController::class, 'StripeOrder'])->name('stripe.order');
+
+    Route::post('/cash/order', [CashController::class, 'CashOrder'])->name('cash.order');
+
 
     // Frontend Product Details Page url
     Route::get('/product/details/{id}', [FrontEndController::class, 'ProductDetails'])->name('productdetail');
@@ -237,6 +257,35 @@ Route::group(['prefix'=> 'admin'], function(){
 
     });
 
+    // Admin Order All Routes
+    Route::prefix('orders')->group(function(){
+
+        Route::get('/pending/', [AdminOrderController::class, 'PendingOrders'])->name('pending-orders');
+        Route::get('/pending/details/{order_id}', [AdminOrderController::class, 'PendingOrdersDetails'])->name('pending.order.details');
+        Route::get('/confirmed', [AdminOrderController::class, 'ConfirmedOrders'])->name('confirmed-orders');
+        Route::get('/processing', [AdminOrderController::class, 'ProcessingOrders'])->name('processing-orders');
+        Route::get('/picked', [AdminOrderController::class, 'PickedOrders'])->name('picked-orders');
+        Route::get('/shipped', [AdminOrderController::class, 'ShippedOrders'])->name('shipped-orders');
+        Route::get('/delivered', [AdminOrderController::class, 'DeliveredOrders'])->name('delivered-orders');
+        Route::get('/canceled', [AdminOrderController::class, 'CancelOrders'])->name('canceled-orders');
+
+        // Update Status
+        Route::get('/pending/confirm/{order_id}', [AdminOrderController::class, 'PendingToConfirm'])->name('pending-confirm');
+
+        Route::get('/confirm/processing/{order_id}', [AdminOrderController::class, 'ConfirmToProcessing'])->name('confirm.processing');
+
+        Route::get('/processing/picked/{order_id}', [AdminOrderController::class, 'ProcessingToPicked'])->name('processing.picked');
+
+        Route::get('/picked/shipped/{order_id}', [AdminOrderController::class, 'PickedToShipped'])->name('picked.shipped');
+
+        Route::get('/shipped/delivered/{order_id}', [AdminOrderController::class, 'ShippedToDelivered'])->name('shipped.delivered');
+
+        Route::get('/invoice/download/{order_id}', [AdminOrderController::class, 'AdminInvoiceDownload'])->name('invoice.download');
+
+
+    });
+
+
 });
 
 
@@ -251,87 +300,17 @@ Route::group( ['prefix'=>'user', 'middleware' => ['auth'] ],function(){
     // Wishlist page
     Route::get('/wishlist', [WishlistController::class, 'ViewWishlist'])->name('wishlist');
 
-
-
-    Route::post('/stripe/order', [StripeController::class, 'StripeOrder'])->name('stripe.order');
-
-    Route::post('/cash/order', [CashController::class, 'CashOrder'])->name('cash.order');
-
-    Route::get('/my/orders', [AllUserController::class, 'MyOrders'])->name('my.orders');
-
-    Route::get('/order_details/{order_id}', [AllUserController::class, 'OrderDetails']);
-
-    Route::get('/invoice_download/{order_id}', [AllUserController::class, 'InvoiceDownload']);
-
-    Route::post('/return/order/{order_id}', [AllUserController::class, 'ReturnOrder'])->name('return.order');
-
-    Route::get('/return/order/list', [AllUserController::class, 'ReturnOrderList'])->name('return.order.list');
-
-    Route::get('/cancel/orders', [AllUserController::class, 'CancelOrders'])->name('cancel.orders');
-
-
     /// Order Traking Route
-    Route::post('/order/tracking', [AllUserController::class, 'OrderTraking'])->name('order.tracking');
+    Route::post('/order/tracking',              [UserOrderController::class, 'OrderTraking'])->name('order.tracking');
+    Route::get('/my/orders',                    [UserOrderController::class, 'MyOrders'])->name('my.orders');
+    Route::get('/order_details/{order_id}',     [UserOrderController::class, 'OrderDetails']);
+    Route::get('/invoice_download/{order_id}',  [UserOrderController::class, 'InvoiceDownload']);
+    Route::post('/return/order/{order_id}',     [UserOrderController::class, 'ReturnOrder'])->name('return.order');
+    Route::get('/return/order/list',            [UserOrderController::class, 'ReturnOrderList'])->name('return.order.list');
+    Route::get('/cancel/orders',                [UserOrderController::class, 'CancelOrders'])->name('cancel.orders');
 
 });
 
-
-// Frontend Coupon Option
-
-Route::post('/coupon-apply', [CartController::class, 'CouponApply']);
-
-Route::get('/coupon-calculation', [CartController::class, 'CouponCalculation']);
-
-Route::get('/coupon-remove', [CartController::class, 'CouponRemove']);
-
- // Checkout Routes
-
-Route::get('/checkout', [CartController::class, 'CheckoutCreate'])->name('checkout');
-
-Route::get('/district-get/ajax/{division_id}', [CheckoutController::class, 'DistrictGetAjax']);
-
-Route::get('/state-get/ajax/{district_id}', [CheckoutController::class, 'StateGetAjax']);
-
-Route::post('/checkout/store', [CheckoutController::class, 'CheckoutStore'])->name('checkout.store');
-
-
-
-// Admin Order All Routes
-
-Route::prefix('orders')->group(function(){
-
-Route::get('/pending/orders', [OrderController::class, 'PendingOrders'])->name('pending-orders');
-
-Route::get('/pending/orders/details/{order_id}', [OrderController::class, 'PendingOrdersDetails'])->name('pending.order.details');
-
-Route::get('/confirmed/orders', [OrderController::class, 'ConfirmedOrders'])->name('confirmed-orders');
-
-Route::get('/processing/orders', [OrderController::class, 'ProcessingOrders'])->name('processing-orders');
-
-Route::get('/picked/orders', [OrderController::class, 'PickedOrders'])->name('picked-orders');
-
-Route::get('/shipped/orders', [OrderController::class, 'ShippedOrders'])->name('shipped-orders');
-
-Route::get('/delivered/orders', [OrderController::class, 'DeliveredOrders'])->name('delivered-orders');
-
-Route::get('/cancel/orders', [OrderController::class, 'CancelOrders'])->name('cancel-orders');
-
-// Update Status
-Route::get('/pending/confirm/{order_id}', [OrderController::class, 'PendingToConfirm'])->name('pending-confirm');
-
-Route::get('/confirm/processing/{order_id}', [OrderController::class, 'ConfirmToProcessing'])->name('confirm.processing');
-
-Route::get('/processing/picked/{order_id}', [OrderController::class, 'ProcessingToPicked'])->name('processing.picked');
-
-Route::get('/picked/shipped/{order_id}', [OrderController::class, 'PickedToShipped'])->name('picked.shipped');
-
-Route::get('/shipped/delivered/{order_id}', [OrderController::class, 'ShippedToDelivered'])->name('shipped.delivered');
-
-Route::get('/invoice/download/{order_id}', [OrderController::class, 'AdminInvoiceDownload'])->name('invoice.download');
-
-
-
-});
 
 // Admin Reports Routes
 Route::prefix('reports')->group(function(){
