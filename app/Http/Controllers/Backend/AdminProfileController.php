@@ -115,6 +115,16 @@ class AdminProfileController extends Controller
             return redirect()->back()->with( $errors );
         }
 
-    }// end method
+    }
+
+    /**
+     * Function getting all users
+     *
+     * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View
+     */
+    public function AllUsers(){
+        $users = User::latest()->get();
+        return view('backend.user.all_user',compact('users'));
+    }
 
 }

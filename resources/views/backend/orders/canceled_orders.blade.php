@@ -3,12 +3,16 @@
 
     <!-- Content Wrapper. Contains page content -->
     <div class="container-full">
+    <!-- Content Header (Page header) -->
+
+        <!-- Main content -->
         <section class="content">
             <div class="row">
                 <div class="col-12">
+
                     <div class="box">
                         <div class="box-header with-border">
-                            <h3 class="box-title">Shipped Orders List</h3>
+                            <h3 class="box-title">Cancel Orders List</h3>
                         </div>
                         <div class="box-body">
                             <div class="table-responsive">
@@ -32,7 +36,6 @@
 
                                                 <td> {{ $item->payment_method }}  </td>
                                                 <td> <span class="badge badge-pill badge-primary">{{ $item->status }} </span>  </td>
-
                                                 <td width="25%">
                                                     <a href="{{ route('pending.order.details',$item->id) }}" class="btn btn-info" title="Edit Data"><i class="fa fa-eye"></i> </a>
                                                     <a href="{{ route('coupon.delete',$item->id) }}" class="btn btn-danger" title="Delete Data" id="delete">
@@ -46,9 +49,12 @@
                             </div>
                         </div>
                     </div>
+
                 </div>
             </div>
         </section>
+        <!-- /.content -->
+
     </div>
 
 @endsection

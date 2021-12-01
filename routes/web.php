@@ -13,8 +13,8 @@ use App\Http\Controllers\Backend\SliderController;
 use App\Http\Controllers\Backend\CouponController;
 use App\Http\Controllers\Backend\ShippingAreaController;
 use App\Http\Controllers\Backend\AdminOrderController;
-//use App\Http\Controllers\Backend\ReportController;
-//use App\Http\Controllers\Backend\BlogController;
+use App\Http\Controllers\Backend\ReportController;
+use App\Http\Controllers\Backend\BlogController;
 //use App\Http\Controllers\Backend\SiteSettingController;
 //use App\Http\Controllers\Backend\ReturnController;
 //use App\Http\Controllers\Backend\AdminUserController;
@@ -45,7 +45,7 @@ use App\Http\Controllers\User\UserOrderController;
 |
 */
 
-Route::group(['middleware' => 'web'], function () {
+Route::group(['middleware' => ['web', 'user']], function () {
 
     Route::get('/',          [IndexController::class, 'Index'])->name('home');
     Route::get('/dashboard', [AdminController::class, 'UserProfile'])->name('dashboard');
@@ -138,7 +138,7 @@ Route::group(['middleware' => 'web'], function () {
 /**
  * Admin Dashboard
  */
-Route::group(['prefix'=> 'admin'], function(){
+Route::group(['prefix'=> 'admin', 'middleware' => ['auth', 'user'] ], function(){
 
 	Route::get('/login',  [IndexController::class, 'loginForm'])->name('admin.login');
 	Route::post('/login', [IndexController::class, 'CustomLogin']);
@@ -261,36 +261,68 @@ Route::group(['prefix'=> 'admin'], function(){
     Route::prefix('orders')->group(function(){
 
         Route::get('/pending/', [AdminOrderController::class, 'PendingOrders'])->name('pending-orders');
-        Route::get('/pending/details/{order_id}', [AdminOrderController::class, 'PendingOrdersDetails'])->name('pending.order.details');
+        Route::get('/order/details/{order_id}', [AdminOrderController::class, 'AdminOrdersDetails'])->name('pending.order.details');
         Route::get('/confirmed', [AdminOrderController::class, 'ConfirmedOrders'])->name('confirmed-orders');
         Route::get('/processing', [AdminOrderController::class, 'ProcessingOrders'])->name('processing-orders');
         Route::get('/picked', [AdminOrderController::class, 'PickedOrders'])->name('picked-orders');
         Route::get('/shipped', [AdminOrderController::class, 'ShippedOrders'])->name('shipped-orders');
         Route::get('/delivered', [AdminOrderController::class, 'DeliveredOrders'])->name('delivered-orders');
-        Route::get('/canceled', [AdminOrderController::class, 'CancelOrders'])->name('canceled-orders');
+        Route::get('/canceled', [AdminOrderController::class, 'CanceledOrders'])->name('canceled-orders');
 
         // Update Status
         Route::get('/pending/confirm/{order_id}', [AdminOrderController::class, 'PendingToConfirm'])->name('pending-confirm');
-
-        Route::get('/confirm/processing/{order_id}', [AdminOrderController::class, 'ConfirmToProcessing'])->name('confirm.processing');
-
+        Route::get('/confirmed/processing/{order_id}', [AdminOrderController::class, 'ConfirmToProcessing'])->name('confirm.processing');
         Route::get('/processing/picked/{order_id}', [AdminOrderController::class, 'ProcessingToPicked'])->name('processing.picked');
-
         Route::get('/picked/shipped/{order_id}', [AdminOrderController::class, 'PickedToShipped'])->name('picked.shipped');
-
         Route::get('/shipped/delivered/{order_id}', [AdminOrderController::class, 'ShippedToDelivered'])->name('shipped.delivered');
-
         Route::get('/invoice/download/{order_id}', [AdminOrderController::class, 'AdminInvoiceDownload'])->name('invoice.download');
-
 
     });
 
+
+    // Admin Reports Routes
+    Route::prefix('reports')->group(function(){
+
+        Route::get('/view',             [ReportController::class, 'ReportView'])->name('all-reports');
+        Route::post('/search/by/date',  [ReportController::class, 'ReportByDate'])->name('search-by-date');
+        Route::post('/search/by/month', [ReportController::class, 'ReportByMonth'])->name('search-by-month');
+        Route::post('/search/by/year', [ReportController::class, 'ReportByYear'])->name('search-by-year');
+
+    });
+
+    // Admin Get All User Routes
+    Route::prefix('allusers')->group(function(){
+        Route::get('/view', [AdminProfileController::class, 'AllUsers'])->name('all-users')->middleware('user');
+    });
+
+
+    // Admin Blog  Routes
+    Route::prefix('blog')->group(function(){
+
+        Route::get('/category', [BlogController::class, 'BlogCategory'])->name('blog.category');
+
+        Route::post('/store', [BlogController::class, 'BlogCategoryStore'])->name('blogcategory.store');
+
+        Route::get('/category/edit/{id}', [BlogController::class, 'BlogCategoryEdit'])->name('blog.category.edit');
+
+
+        Route::post('/update', [BlogController::class, 'BlogCategoryUpdate'])->name('blogcategory.update');
+
+        // Admin View Blog Post Routes
+
+        Route::get('/list/post', [BlogController::class, 'ListBlogPost'])->name('list.post');
+
+        Route::get('/add/post', [BlogController::class, 'AddBlogPost'])->name('add.post');
+
+        Route::post('/post/store', [BlogController::class, 'BlogPostStore'])->name('post-store');
+
+    });
 
 });
 
 
 /////////////////////  User Must Login  ////
-Route::group( ['prefix'=>'user', 'middleware' => ['auth'] ],function(){
+Route::group( ['prefix'=>'user', 'middleware' => ['auth', 'user'] ],function(){
 
     Route::get('/profile',          [UserProfileController::class, 'UserProfile'])->name('user.profile');
     Route::post('/profile/store',   [UserProfileController::class, 'UserProfileStore'])->name('user.profile.store');
@@ -312,51 +344,6 @@ Route::group( ['prefix'=>'user', 'middleware' => ['auth'] ],function(){
 });
 
 
-// Admin Reports Routes
-Route::prefix('reports')->group(function(){
-
-Route::get('/view', [ReportController::class, 'ReportView'])->name('all-reports');
-
-Route::post('/search/by/date', [ReportController::class, 'ReportByDate'])->name('search-by-date');
-
-Route::post('/search/by/month', [ReportController::class, 'ReportByMonth'])->name('search-by-month');
-
-Route::post('/search/by/year', [ReportController::class, 'ReportByYear'])->name('search-by-year');
-
-});
-
-
-
-// Admin Get All User Routes
-Route::prefix('alluser')->group(function(){
-
-Route::get('/view', [AdminProfileController::class, 'AllUsers'])->name('all-users');
-
-
-});
-
-
-// Admin Blog  Routes
-Route::prefix('blog')->group(function(){
-
-Route::get('/category', [BlogController::class, 'BlogCategory'])->name('blog.category');
-
-Route::post('/store', [BlogController::class, 'BlogCategoryStore'])->name('blogcategory.store');
-
-Route::get('/category/edit/{id}', [BlogController::class, 'BlogCategoryEdit'])->name('blog.category.edit');
-
-
-Route::post('/update', [BlogController::class, 'BlogCategoryUpdate'])->name('blogcategory.update');
-
-// Admin View Blog Post Routes
-
-Route::get('/list/post', [BlogController::class, 'ListBlogPost'])->name('list.post');
-
-Route::get('/add/post', [BlogController::class, 'AddBlogPost'])->name('add.post');
-
-Route::post('/post/store', [BlogController::class, 'BlogPostStore'])->name('post-store');
-
-});
 
 //  Frontend Blog Show Routes
 

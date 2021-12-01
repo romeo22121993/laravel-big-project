@@ -55,6 +55,21 @@
                 </ul>
             </li>
 
+            <li class="treeview {{ ($prefix == '/blog')?'active':'' }}  ">
+                <a href="#">
+                    <i data-feather="file"></i>
+                    <span>Manage Blog</span>
+                    <span class="pull-right-container">
+                      <i class="fa fa-angle-right pull-right"></i>
+                    </span>
+                </a>
+                <ul class="treeview-menu">
+                    <li class="{{ ($route == 'blog.category')? 'active':'' }}"><a href="{{ route('blog.category') }}"><i class="ti-more"></i>Blog Category</a></li>
+                    <li class="{{ ($route == 'list.post')? 'active':'' }}"><a href="{{ route('list.post') }}"><i class="ti-more"></i>List Blog Post</a></li>
+                    <li class="{{ ($route == 'add.post')? 'active':'' }}"><a href="{{ route('add.post') }}"><i class="ti-more"></i>Add Blog Post</a></li>
+                </ul>
+            </li>
+
             <li class="treeview {{ ($prefix == 'admin/product')?'active':'' }}  ">
                 <a href="#">
                     <i data-feather="mail"></i> <span>Products </span>
@@ -124,7 +139,34 @@
                     <li class="{{ ($route == 'picked-orders')? 'active':'' }}"><a href="{{ route('picked-orders') }}"><i class="ti-more"></i> Picked Orders</a></li>
                     <li class="{{ ($route == 'shipped-orders')? 'active':'' }}"><a href="{{ route('shipped-orders') }}"><i class="ti-more"></i> Shipped Orders</a></li>
                     <li class="{{ ($route == 'delivered-orders')? 'active':'' }}"><a href="{{ route('delivered-orders') }}"><i class="ti-more"></i> Delivered Orders</a></li>
-                    <li class="{{ ($route == 'canceled-orders')? 'active':'' }}"><a href="{{ route('canceled-orders') }}"><i class="ti-more"></i> Cancel Orders</a></li>
+                    <li class="{{ ($route == 'canceled-orders')? 'active':'' }}"><a href="{{ route('canceled-orders') }}"><i class="ti-more"></i> Canceled Orders</a></li>
+                </ul>
+            </li>
+
+            <li class="treeview {{ ($prefix == '/reports')?'active':'' }}  ">
+                <a href="#">
+                    <i data-feather="file"></i>
+                    <span>All Reports </span>
+                    <span class="pull-right-container">
+                      <i class="fa fa-angle-right pull-right"></i>
+                    </span>
+                </a>
+                <ul class="treeview-menu">
+                    <li class="{{ ($route == 'all-reports')? 'active':'' }}"><a href="{{ route('all-reports') }}"><i class="ti-more"></i>All Reports</a></li>
+                </ul>
+            </li>
+
+
+            <li class="treeview {{ ($prefix == '/alluser')?'active':'' }}  ">
+                <a href="#">
+                    <i data-feather="file"></i>
+                    <span>All Users </span>
+                    <span class="pull-right-container">
+                      <i class="fa fa-angle-right pull-right"></i>
+                    </span>
+                </a>
+                <ul class="treeview-menu">
+                    <li class="{{ ($route == 'all-users')? 'active':'' }}"><a href="{{ route('all-users') }}"><i class="ti-more"></i>All Users</a></li>
                 </ul>
             </li>
 
