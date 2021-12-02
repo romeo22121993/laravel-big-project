@@ -5,9 +5,11 @@ namespace App\Http\Controllers\Frontend;
 use App\Http\Controllers\Controller;
 use App\Models\MultiImg;
 use App\Models\Product;
+use App\Models\SiteSetting;
 use Illuminate\Http\Request;
 use Auth;
 use App\Models\User;
+use App\Models\Blog\BlogPost;
 use App\Models\Category;
 use App\Models\Slider;
 use App\Rules\MatchOldPassword;
@@ -47,7 +49,10 @@ class IndexController extends Controller
         $tags_hin = $this->getDistinctTags( $tags_hin, 'hin' );
         $tags_en  = $this->getDistinctTags( $tags_en, 'en' );
 
-        return view('frontend.index', compact( 'categories', 'subcategory', 'subsubcategory', 'sliders', 'products', 'featured', 'hot_deals', 'special_offer', 'special_deals', 'tags_en','chosen_tag' , 'tags_hin' ));
+        $blogposts = BlogPost::latest()->take(5)->get();
+        $settings  = SiteSetting::find(1);
+
+        return view('frontend.index', compact( 'blogposts', 'settings', 'categories', 'subcategory', 'subsubcategory', 'sliders', 'products', 'featured', 'hot_deals', 'special_offer', 'special_deals', 'tags_en','chosen_tag' , 'tags_hin' ));
     }
 
     /**

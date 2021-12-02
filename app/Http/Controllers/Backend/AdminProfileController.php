@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Backend;
 
 use App\Http\Controllers\Controller;
+use App\Models\SiteSetting;
 use Illuminate\Http\Request;
 use Auth;
 use App\Models\User;
@@ -26,8 +27,9 @@ class AdminProfileController extends Controller
 
         $id = Auth::user()->id;
         $adminData = User::find( $id );
+        $settings  = SiteSetting::find(1);
 
-        return view( 'admin.admin_profile_view', compact( 'adminData' ) );
+        return view( 'admin.admin_profile_view', compact( 'adminData', 'settings' ) );
 
     }
 
@@ -73,7 +75,7 @@ class AdminProfileController extends Controller
 
         return redirect()->route('admin.profile')->with($notification);
 
-    } // end method
+    }
 
 
     /**
@@ -98,7 +100,6 @@ class AdminProfileController extends Controller
             'password'      => ['required'],
             'password_confirmation' => ['same:password'],
         ]);
-
 
         $hashedPassword = Auth::user()->password;
         if ( Hash::check($request->oldpassword,$hashedPassword ) ) {

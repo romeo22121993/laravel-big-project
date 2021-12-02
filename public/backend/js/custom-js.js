@@ -11,8 +11,6 @@ $(function () {
         });
 
 
-
-
         /**
          * Ajax requests for getting sub/subsub categories
          *

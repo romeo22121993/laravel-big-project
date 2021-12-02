@@ -15,7 +15,7 @@ use App\Http\Controllers\Backend\ShippingAreaController;
 use App\Http\Controllers\Backend\AdminOrderController;
 use App\Http\Controllers\Backend\ReportController;
 use App\Http\Controllers\Backend\BlogController;
-//use App\Http\Controllers\Backend\SiteSettingController;
+use App\Http\Controllers\Backend\SiteSettingController;
 //use App\Http\Controllers\Backend\ReturnController;
 //use App\Http\Controllers\Backend\AdminUserController;
 
@@ -23,7 +23,7 @@ use App\Http\Controllers\Frontend\IndexController;
 use App\Http\Controllers\Frontend\FrontEndController;
 use App\Http\Controllers\Frontend\LanguageController;
 use App\Http\Controllers\Frontend\CartController;
-//use App\Http\Controllers\Frontend\HomeBlogController;
+use App\Http\Controllers\Frontend\HomeBlogController;
 
 use App\Http\Controllers\User\WishlistController;
 use App\Http\Controllers\User\CartPageController;
@@ -45,7 +45,7 @@ use App\Http\Controllers\User\UserOrderController;
 |
 */
 
-Route::group(['middleware' => ['web', 'user']], function () {
+Route::group(['middleware' => ['web']], function () {
 
     Route::get('/',          [IndexController::class, 'Index'])->name('home');
     Route::get('/dashboard', [AdminController::class, 'UserProfile'])->name('dashboard');
@@ -65,6 +65,11 @@ Route::group(['middleware' => ['web', 'user']], function () {
     // Checkout Routes
     Route::get('/checkout',         [CheckoutController::class, 'Checkout'])->name('checkout');
     Route::post('/checkout/store',  [CheckoutController::class, 'CheckoutStore'])->name('checkout.store');
+
+    //  Frontend Blog Show Routes
+    Route::get('/blog',              [HomeBlogController::class, 'BlogList'])->name('home.blog');
+    Route::get('/post/details/{id}', [HomeBlogController::class, 'DetailsBlogPost'])->name('post.details');
+    Route::get('/blog/category/post/{category_id}', [HomeBlogController::class, 'HomeBlogCatPost']);
 
     // Ajax requests
     Route::group(['prefix'=> 'ajax'], function(){
@@ -295,28 +300,68 @@ Route::group(['prefix'=> 'admin', 'middleware' => ['auth', 'user'] ], function()
         Route::get('/view', [AdminProfileController::class, 'AllUsers'])->name('all-users')->middleware('user');
     });
 
-
     // Admin Blog  Routes
     Route::prefix('blog')->group(function(){
 
         Route::get('/category', [BlogController::class, 'BlogCategory'])->name('blog.category');
-
-        Route::post('/store', [BlogController::class, 'BlogCategoryStore'])->name('blogcategory.store');
-
+        Route::post('/store',   [BlogController::class, 'BlogCategoryStore'])->name('blogcategory.store');
         Route::get('/category/edit/{id}', [BlogController::class, 'BlogCategoryEdit'])->name('blog.category.edit');
-
-
         Route::post('/update', [BlogController::class, 'BlogCategoryUpdate'])->name('blogcategory.update');
 
         // Admin View Blog Post Routes
-
         Route::get('/list/post', [BlogController::class, 'ListBlogPost'])->name('list.post');
-
         Route::get('/add/post', [BlogController::class, 'AddBlogPost'])->name('add.post');
-
         Route::post('/post/store', [BlogController::class, 'BlogPostStore'])->name('post-store');
+    });
+
+
+    // Admin Site Setting Routes
+    Route::prefix('settings')->group(function(){
+
+        Route::get('/site',         [SiteSettingController::class, 'SiteSetting'])->name('site.settings');
+        Route::post('/site/update', [SiteSettingController::class, 'SiteSettingUpdate'])->name('update.sitesetting');
+//        Route::get('/seo', [SiteSettingController::class, 'SeoSetting'])->name('seo.settings');
+//        Route::post('/seo/update', [SiteSettingController::class, 'SeoSettingUpdate'])->name('update.seosetting');
+    });
+
+    // Admin Manage Review Routes
+    Route::prefix('review')->group(function(){
+
+        Route::get('/pending', [ReviewController::class, 'PendingReview'])->name('pending.review');
+
+        Route::get('/admin/approve/{id}', [ReviewController::class, 'ReviewApprove'])->name('review.approve');
+
+        Route::get('/publish', [ReviewController::class, 'PublishReview'])->name('publish.review');
+
+        Route::get('/delete/{id}', [ReviewController::class, 'DeleteReview'])->name('delete.review');
 
     });
+
+    // Admin Manage Stock Routes
+    Route::prefix('stock')->group(function(){
+
+        Route::get('/product', [ProductController::class, 'ProductStock'])->name('product.stock');
+
+
+    });
+
+    // Admin User Role Routes
+    Route::prefix('adminuserrole')->group(function(){
+
+        Route::get('/all', [AdminUserController::class, 'AllAdminRole'])->name('all.admin.user');
+
+        Route::get('/add', [AdminUserController::class, 'AddAdminRole'])->name('add.admin');
+
+        Route::post('/store', [AdminUserController::class, 'StoreAdminRole'])->name('admin.user.store');
+
+        Route::get('/edit/{id}', [AdminUserController::class, 'EditAdminRole'])->name('edit.admin.user');
+
+        Route::post('/update', [AdminUserController::class, 'UpdateAdminRole'])->name('admin.user.update');
+
+        Route::get('/delete/{id}', [AdminUserController::class, 'DeleteAdminRole'])->name('delete.admin.user');
+
+    });
+
 
 });
 
@@ -345,28 +390,6 @@ Route::group( ['prefix'=>'user', 'middleware' => ['auth', 'user'] ],function(){
 
 
 
-//  Frontend Blog Show Routes
-
-Route::get('/blog', [HomeBlogController::class, 'AddBlogPost'])->name('home.blog');
-
-Route::get('/post/details/{id}', [HomeBlogController::class, 'DetailsBlogPost'])->name('post.details');
-
-Route::get('/blog/category/post/{category_id}', [HomeBlogController::class, 'HomeBlogCatPost']);
-
-
-
-// Admin Site Setting Routes
-Route::prefix('setting')->group(function(){
-
-Route::get('/site', [SiteSettingController::class, 'SiteSetting'])->name('site.setting');
-Route::post('/site/update', [SiteSettingController::class, 'SiteSettingUpdate'])->name('update.sitesetting');
-
-Route::get('/seo', [SiteSettingController::class, 'SeoSetting'])->name('seo.setting');
-
-Route::post('/seo/update', [SiteSettingController::class, 'SeoSettingUpdate'])->name('update.seosetting');
-});
-
-
 
 // Admin Return Order Routes
 Route::prefix('return')->group(function(){
@@ -383,48 +406,6 @@ Route::get('/admin/all/request', [ReturnController::class, 'ReturnAllRequest'])-
 
 Route::post('/review/store', [ReviewController::class, 'ReviewStore'])->name('review.store');
 
-
-// Admin Manage Review Routes
-Route::prefix('review')->group(function(){
-
-Route::get('/pending', [ReviewController::class, 'PendingReview'])->name('pending.review');
-
-Route::get('/admin/approve/{id}', [ReviewController::class, 'ReviewApprove'])->name('review.approve');
-
-Route::get('/publish', [ReviewController::class, 'PublishReview'])->name('publish.review');
-
-Route::get('/delete/{id}', [ReviewController::class, 'DeleteReview'])->name('delete.review');
-
-});
-
-
-
-// Admin Manage Stock Routes
-Route::prefix('stock')->group(function(){
-
-Route::get('/product', [ProductController::class, 'ProductStock'])->name('product.stock');
-
-
-});
-
-
-
-// Admin User Role Routes
-Route::prefix('adminuserrole')->group(function(){
-
-Route::get('/all', [AdminUserController::class, 'AllAdminRole'])->name('all.admin.user');
-
-Route::get('/add', [AdminUserController::class, 'AddAdminRole'])->name('add.admin');
-
-Route::post('/store', [AdminUserController::class, 'StoreAdminRole'])->name('admin.user.store');
-
-Route::get('/edit/{id}', [AdminUserController::class, 'EditAdminRole'])->name('edit.admin.user');
-
-Route::post('/update', [AdminUserController::class, 'UpdateAdminRole'])->name('admin.user.update');
-
-Route::get('/delete/{id}', [AdminUserController::class, 'DeleteAdminRole'])->name('delete.admin.user');
-
-});
 
 /// Product Search Route
 Route::post('/search', [IndexController::class, 'ProductSearch'])->name('product.search');

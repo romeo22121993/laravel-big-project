@@ -45,7 +45,7 @@ class UserProfileController extends Controller
         $data->email = $request->email;
         $data->phone = $request->phone;
 
-        if ($request->file('profile_photo_path')) {
+        if ( $request->file('profile_photo_path') ) {
             $file = $request->file('profile_photo_path');
             @unlink(public_path('upload/user_images/'.$data->profile_photo_path));
             $filename = date('YmdHi').$file->getClientOriginalName();
@@ -61,7 +61,7 @@ class UserProfileController extends Controller
 
         return redirect()->route('dashboard')->with($notification);
 
-    } // end method
+    }
 
 
     /**

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\SiteSetting;
 use Illuminate\Contracts\Auth\StatefulGuard;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
@@ -21,6 +22,7 @@ use App\Models\User;
 
 class AdminController extends Controller
 {
+
     /**
      * The guard implementation.
      *
@@ -50,9 +52,10 @@ class AdminController extends Controller
 
         $id = Auth::user()->id;
         $adminData = User::find( $id );
+        $settings  = SiteSetting::find(1);
+        $viewFile  = ( $adminData->user_role == 'user' ) ? 'frontend.profile.user_dashboard' : 'admin.index';
 
-        $viewFile = ( $adminData->user_role == 'user' ) ? 'frontend.profile.user_dashboard' : 'admin.index';
-        return view( $viewFile,compact( 'adminData' ) );
+        return view( $viewFile,compact( 'adminData', 'settings' ) );
 
     }
 
@@ -122,14 +125,19 @@ class AdminController extends Controller
 
         $request->session()->regenerateToken();
 
-
          return app(LogoutResponse::class);
 //         return  Redirect()->route('login');
     }
 
+    /**
+     * Function logout
+     *
+     * @return \Illuminate\Http\RedirectResponse
+     */
     public function logout( ) {
         Auth::logout();
         return  Redirect()->route('login');
     }
+
 }
 

@@ -118,7 +118,9 @@ $categories    = \App\Models\Category::where('category_id', 0)->orderBy('categor
             <div class="row">
                 <div class="col-xs-12 col-sm-12 col-md-3 logo-holder">
                     <!-- ============================================================= LOGO ============================================================= -->
-                    <div class="logo"> <a href="/"> <img src="{{ asset('frontend/assets/images/logo.png') }}" alt="logo"> </a> </div>
+                    <div class="logo">
+                        <a href="/"> <img src="{{ asset($settings->logo) }}" alt="logo"> </a>
+                    </div>
                     <!-- ============================================================= LOGO : END ============================================================= --> </div>
 
                 <div class="col-xs-12 col-sm-12 col-md-7 top-search-holder">

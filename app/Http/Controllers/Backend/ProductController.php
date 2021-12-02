@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Backend;
 
 use App\Http\Controllers\Controller;
+use App\Models\SiteSetting;
 use Illuminate\Http\Request;
 use App\Models\Category;
 use App\Models\Brand;
@@ -15,6 +16,12 @@ use Image;
 class ProductController extends Controller
 {
 
+    public $settings = [];
+
+    public function __construct() {
+        $this->settings = SiteSetting::find(1);
+    }
+
     /**
     * Function for view all products page
     *
@@ -23,8 +30,9 @@ class ProductController extends Controller
     public function ManageProduct(){
 
         $products = Product::latest()->get();
+        $settings = $this->settings;
 
-        return view('backend.product.product_view',compact('products'));
+        return view('backend.product.product_view',compact('products', 'settings'));
     }
 
     /**
@@ -35,8 +43,9 @@ class ProductController extends Controller
     public function AddProduct(){
         $categories = Category::where('category_id', 0)->get();
         $brands     = Brand::latest()->get();
+        $settings   = $this->settings;
 
-        return view('backend.product.product_add',compact('categories','brands'));
+        return view('backend.product.product_add',compact('categories','brands', 'settings'));
     }
 
     /**
@@ -47,9 +56,6 @@ class ProductController extends Controller
     */
     public function StoreProduct(Request $request){
 
-//        $request->validate([
-//          'file' => 'required|mimes:jpeg,png,jpg,zip,pdf|max:2048',
-//        ]);
         $digitalItem = '';
 
         if ( !empty( $request->file('file') ) && ( $files = $request->file('file') )) {
@@ -96,9 +102,9 @@ class ProductController extends Controller
             'special_deals' => $request->special_deals,
 
             'product_thambnail' => $save_url,
-            'digital_file' => $digitalItemPath,
-            'status' => 1,
-            'created_at' => Carbon::now(),
+            'digital_file'      => $digitalItemPath,
+            'status'            => 1,
+            'created_at'        => Carbon::now(),
 
         ]);
 
@@ -109,8 +115,6 @@ class ProductController extends Controller
             $make_name = hexdec(uniqid()).'.'.$img->getClientOriginalExtension();
 
             $uploadPath = 'upload/products/multi-image/'. $make_name;
-//            $uploadPath = 'upload/products/multi-image/' . $product_id;
-//            mkdir($uploadPath, 0777);
             Image::make($img)->resize(300,500)->save($uploadPath);
 
             MultiImg::insert([
@@ -128,9 +132,7 @@ class ProductController extends Controller
 
         return redirect()->route('product.manage')->with($notification);
 
-
-    } // end method
-
+    }
 
     /**
     * Function of editing product
@@ -148,11 +150,11 @@ class ProductController extends Controller
         $subsubcategory = Category::where('category_id', $products->category_id )->where('subcategory_id', $products->subcategory_id)->get();
 
         $brands   = Brand::latest()->get();
+        $settings = $this->settings;
 
-        return view('backend.product.product_edit',compact('categories','brands','subcategory','subsubcategory', 'products', 'multiImgs'));
+        return view('backend.product.product_edit',compact( 'settings', 'categories','brands','subcategory','subsubcategory', 'products', 'multiImgs'));
 
     }
-
 
     /**
      * Function updating product
@@ -206,11 +208,15 @@ class ProductController extends Controller
 
         return redirect()->route('product.manage')->with($notification);
 
+    }
 
-    } // end method
 
-
-    /// Multiple Image Update
+    /**
+     * Function updating multiple image
+     *
+     * @param Request $request
+     * @return \Illuminate\Http\RedirectResponse
+     */
     public function MultiImageUpdate(Request $request){
         $imgs = $request->multi_img;
 
@@ -227,7 +233,7 @@ class ProductController extends Controller
                 'updated_at' => Carbon::now(),
             ]);
 
-        } // end foreach
+        }
 
         $notification = array(
             'message' => 'Product Image Updated Successfully',
@@ -236,10 +242,8 @@ class ProductController extends Controller
 
         return redirect()->back()->with($notification);
 
-    } // end mehtod
+    }
 
-
-    /// Product Main Thambnail Update ///
     /**
      * Function of updating thumbnail in edit page
      *
@@ -268,8 +272,7 @@ class ProductController extends Controller
 
         return redirect()->back()->with($notification);
 
-    } // end method
-
+    }
 
     //// Multi Image Delete ////
     /**
@@ -291,8 +294,7 @@ class ProductController extends Controller
 
         return redirect()->back()->with($notification);
 
-    } // end method
-
+    }
 
     /**
      * Function of inactivate product by id
@@ -360,8 +362,7 @@ class ProductController extends Controller
 
         return redirect()->back()->with($notification);
 
-    }// end method
-
+    }
 
     /**
      * Function product stock
@@ -371,8 +372,9 @@ class ProductController extends Controller
     public function ProductStock(){
 
         $products = Product::latest()->get();
-        return view('backend.product.product_stock',compact('products'));
-    }
+        $settings = $this->settings;
+        return view('backend.product.product_stock',compact('products', 'settings'));
 
+    }
 
 }

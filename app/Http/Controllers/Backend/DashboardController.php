@@ -20,7 +20,7 @@ class DashboardController extends Controller
     }
 
     public function index() {
-        $id = Auth::user()->id;
+        $id   = Auth::user()->id;
         $user = User::find($id);
 
         if ( $user->user_role == 'admin' ) {

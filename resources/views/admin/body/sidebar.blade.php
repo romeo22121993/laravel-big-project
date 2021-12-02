@@ -1,6 +1,7 @@
 @php
   $prefix = Request::route()->getPrefix();
   $route  = Route::current()->getName();
+  $settings = \App\Models\SiteSetting::find(1);
 @endphp
 <aside class="main-sidebar">
     <!-- sidebar-->
@@ -10,8 +11,8 @@
             <div class="ulogo">
                 <a href="{{ route('home') }}">
                     <div class="d-flex align-items-center justify-content-center">
-                        <img src="{{ asset('backend/images/logo-dark.png') }}" alt="">
-                        <h3><b>Sunny</b> Admin</h3>
+                        <img src="{{ asset($settings->logo) }}" alt="">
+                        <h3>Admin Panel</h3>
                     </div>
                 </a>
             </div>
@@ -52,6 +53,19 @@
                     <li class="{{ ($route == 'category.all')? 'active':'' }}"><a href="{{ route('category.all') }}"><i class="ti-more"></i>All Category</a></li>
                     <li class="{{ ($route == 'subcategory.all')? 'active':'' }}"><a href="{{ route('subcategory.all') }}"><i class="ti-more"></i>All SubCategory</a></li>
                     <li class="{{ ($route == 'subsubcategory.all')? 'active':'' }}"><a href="{{ route('subsubcategory.all') }}"><i class="ti-more"></i>All Sub->SubCategory</a></li>
+                </ul>
+            </li>
+
+            <li class="treeview {{ ($prefix == '/settings') ? 'active':'' }}  ">
+                <a href="#">
+                    <i data-feather="file"></i>
+                    <span>Manage Settings</span>
+                    <span class="pull-right-container">
+                      <i class="fa fa-angle-right pull-right"></i>
+                    </span>
+                </a>
+                <ul class="treeview-menu">
+                    <li class="{{ ($route == 'site.settings')? 'active':'' }}"><a href="{{ route('site.settings') }}"><i class="ti-more"></i>Site Setting</a></li>
                 </ul>
             </li>
 
@@ -170,6 +184,68 @@
                 </ul>
             </li>
 
+            <li class="treeview {{ ($prefix == '/reports')?'active':'' }}  ">
+                <a href="#">
+                    <i data-feather="file"></i>
+                    <span>All Reports </span>
+                    <span class="pull-right-container">
+              <i class="fa fa-angle-right pull-right"></i>
+            </span>
+                </a>
+                <ul class="treeview-menu">
+                    <li class="{{ ($route == 'all-reports')? 'active':'' }}"><a href="{{ route('all-reports') }}"><i class="ti-more"></i>All Reports</a></li>
+
+
+                </ul>
+            </li>
+
+            <li class="treeview {{ ($prefix == '/stock')?'active':'' }}  ">
+                <a href="#">
+                    <i data-feather="file"></i>
+                    <span>Manage Stock </span>
+                    <span class="pull-right-container">
+              <i class="fa fa-angle-right pull-right"></i>
+            </span>
+                </a>
+                <ul class="treeview-menu">
+                    <li class="{{ ($route == 'product.stock')? 'active':'' }}"><a href="{{ route('product.stock') }}"><i class="ti-more"></i>Product Stock</a></li>
+
+
+                </ul>
+            </li>
+
+            <li class="treeview {{ ($prefix == '/review')?'active':'' }}  ">
+                <a href="#">
+                    <i data-feather="file"></i>
+                    <span>Manage Review</span>
+                    <span class="pull-right-container">
+                      <i class="fa fa-angle-right pull-right"></i>
+                    </span>
+                </a>
+                <ul class="treeview-menu">
+                    <li class="{{ ($route == 'pending.review')? 'active':'' }}"><a href="{{ route('pending.review') }}"><i class="ti-more"></i>Pending Review</a></li>
+                    <li class="{{ ($route == 'publish.review')? 'active':'' }}"><a href="{{ route('publish.review') }}"><i class="ti-more"></i>Publish Review</a></li>
+                </ul>
+            </li>
+
+            <li class="treeview {{ ($prefix == '/return')?'active':'' }}  ">
+                <a href="#">
+                    <i data-feather="file"></i>
+                    <span>Return Order</span>
+                    <span class="pull-right-container">
+              <i class="fa fa-angle-right pull-right"></i>
+            </span>
+                </a>
+                <ul class="treeview-menu">
+                    <li class="{{ ($route == 'return.request')? 'active':'' }}"><a href="{{ route('return.request') }}"><i class="ti-more"></i>Return Request</a></li>
+
+                    <li class="{{ ($route == 'all.request')? 'active':'' }}"><a href="{{ route('all.request') }}"><i class="ti-more"></i>All Request</a></li>
+
+
+                </ul>
+            </li>
+
+
             <li class="treeview">
                 <a href="#">
                     <i data-feather="mail"></i> <span>Mailbox</span>
@@ -220,40 +296,6 @@
                     <li><a href="components_modals.html"><i class="ti-more"></i>Modal</a></li>
                     <li><a href="components_nestable.html"><i class="ti-more"></i>Nestable</a></li>
                     <li><a href="components_progress_bars.html"><i class="ti-more"></i>Progress Bars</a></li>
-                </ul>
-            </li>
-
-            <li class="treeview">
-                <a href="#">
-                    <i data-feather="credit-card"></i>
-                    <span>Cards</span>
-                    <span class="pull-right-container">
-              <i class="fa fa-angle-right pull-right"></i>
-            </span>
-                </a>
-                <ul class="treeview-menu">
-                    <li><a href="card_advanced.html"><i class="ti-more"></i>Advanced Cards</a></li>
-                    <li><a href="card_basic.html"><i class="ti-more"></i>Basic Cards</a></li>
-                    <li><a href="card_color.html"><i class="ti-more"></i>Cards Color</a></li>
-                </ul>
-            </li>
-
-
-            <li class="treeview">
-                <a href="#">
-                    <i data-feather="alert-triangle"></i>
-                    <span>Authentication</span>
-                    <span class="pull-right-container">
-              <i class="fa fa-angle-right pull-right"></i>
-            </span>
-                </a>
-                <ul class="treeview-menu">
-                    <li><a href="{{ route('login') }}"><i class="ti-more"></i>Login</a></li>
-                    <li><a href="{{ route('register') }}"><i class="ti-more"></i>Register</a></li>
-                    <li><a href="auth_lockscreen.html"><i class="ti-more"></i>Lockscreen</a></li>
-                    <li><a href="auth_user_pass.html"><i class="ti-more"></i>Password</a></li>
-                    <li><a href="error_404.html"><i class="ti-more"></i>Error 404</a></li>
-                    <li><a href="error_maintenance.html"><i class="ti-more"></i>Maintenance</a></li>
                 </ul>
             </li>
 

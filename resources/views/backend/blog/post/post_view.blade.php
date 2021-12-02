@@ -76,7 +76,7 @@
                                                 <div class="form-group">
                                                     <h5>Post Main Image  <span class="text-danger">*</span></h5>
                                                     <div class="controls">
-                                                        <input type="file" name="post_image" class="form-control" onChange="mainThamUrl(this)" required="" >
+                                                        <input type="file" name="post_image" class="form-control product_thambnail"  required="" >
                                                         @error('post_image')
                                                           <span class="text-danger">{{ $message }}</span>
                                                         @enderror
@@ -131,19 +131,5 @@
             </div>
         </section>
     </div>
-
-<script type="text/javascript">
-/*
-function mainThamUrl(input){
-if (input.files && input.files[0]) {
-var reader = new FileReader();
-reader.onload = function(e){
-$('#mainThmb').attr('src',e.target.result).width(80).height(80);
-};
-reader.readAsDataURL(input.files[0]);
-}
-}
-*/
-</script>
-
+        
 @endsection
