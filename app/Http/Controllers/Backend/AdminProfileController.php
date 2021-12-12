@@ -7,6 +7,7 @@ use App\Models\SiteSetting;
 use Illuminate\Http\Request;
 use Auth;
 use App\Models\User;
+use App\Models\Order;
 use App\Rules\MatchOldPassword;
 use Illuminate\Support\Facades\Hash;
 use Route;
@@ -29,7 +30,20 @@ class AdminProfileController extends Controller
         $adminData = User::find( $id );
         $settings  = SiteSetting::find(1);
 
-        return view( 'admin.admin_profile_view', compact( 'adminData', 'settings' ) );
+        $date  = date('d-m-y');
+        $today = Order::where('order_date',$date)->sum('amount');
+
+        $month = date('F');
+        $month = Order::where('order_month',$month)->sum('amount');
+
+        $year  = date('Y');
+        $year  = Order::where('order_year',$year)->sum('amount');
+
+        $pending = Order::where('status','pending')->get();
+        $orders = App\Models\Order::where('status','pending')->orderBy('id','DESC')->get();
+
+        return view( 'admin.admin_profile_view', compact( 'adminData', 'settings', 'today',
+            'month', 'year', 'pending', 'orders' ) );
 
     }
 

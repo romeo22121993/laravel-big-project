@@ -9,6 +9,7 @@ use Illuminate\Http\Request;
 use Auth;
 use App\Models\User;
 use App\Models\Category;
+use App\Models\Review;
 use App\Models\Slider;
 use App\Rules\MatchOldPassword;
 use Illuminate\Support\Facades\Hash;
@@ -115,7 +116,6 @@ class FrontEndController extends Controller
 
     }
 
-
     /**
      * Function for product detail page
      *
@@ -153,12 +153,14 @@ class FrontEndController extends Controller
         $tags_hin = $this->index_controller->getDistinctTags( $tags_hin, 'hin' );
         $tags_en  = $this->index_controller->getDistinctTags( $tags_en, 'en' );
 
+        $reviews  = Review::where('product_id',$id)->latest()->limit(5)->get();
+
+
         return view('frontend.product.product_details',
             compact('product','multiImag','product_color_en','product_color_hin','product_size_en','product_size_hin',
-                'relatedProduct',  'featured', 'hot_deals', 'special_offer', 'special_deals', 'tags_en', 'tags_hin' )
+                'relatedProduct',  'featured', 'hot_deals', 'special_offer', 'special_deals', 'tags_en', 'tags_hin', 'reviews' )
         );
     }
-
 
     /**
      * Function getting ajax data by product id
@@ -167,6 +169,7 @@ class FrontEndController extends Controller
      * @return \Illuminate\Http\JsonResponse
      */
     public function ProductViewAjax($id){
+
         $product = Product::with('category','brand')->findOrFail($id);
 
         $color         = $product->product_color_en;
@@ -181,6 +184,56 @@ class FrontEndController extends Controller
             'size'    => $product_size,
         ));
 
-    } // end method
+    }
+
+
+    /**
+     * Function product searching
+     *
+     * @param Request $request
+     * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View
+     */
+    public function ProductSearch(Request $request){
+
+        $request->validate(["search" => "required"]);
+        $item = $request->search;
+
+        $categories = Category::orderBy('category_name_en','ASC')->get();
+        $products   = Product::where('product_name_en','LIKE',"%$item%")->get();
+
+        $featured      = Product::where('featured', 1)->orderBy('id', 'DESC')->limit(6)->get();
+        $hot_deals     = Product::where('hot_deals', 1)->where('discount_price', '!=', NULL)->orderBy('id', 'DESC')->limit(3)->get();
+        $special_offer = Product::where('special_offer', 1)->orderBy('id', 'DESC')->limit(6)->get();
+        $special_deals = Product::where('special_deals', 1)->orderBy('id', 'DESC')->limit(3)->get();
+
+        $tags_en  = Product::groupBy('product_tags_en')->select('product_tags_en')->get();
+        $tags_hin = Product::groupBy('product_tags_hin')->select('product_tags_hin')->get();
+
+        $tags_hin = $this->index_controller->getDistinctTags( $tags_hin, 'hin' );
+        $tags_en  = $this->index_controller->getDistinctTags( $tags_en, 'en' );
+        $chosen_tag  = '';
+
+        return view('frontend.product.search',compact('products','categories', 'tags_hin',
+        'tags_en', 'special_offer', 'special_deals', 'featured', 'hot_deals', 'chosen_tag' ));
+
+    }
+
+
+    /**
+     * Advance Search Options
+     *
+     * @param Request $request
+     * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View
+     */
+    public function SearchProduct(Request $request){
+
+        $request->validate(["search" => "required"]);
+
+        $item = $request->search;
+
+        $products = Product::where('product_name_en','LIKE',"%$item%")->select('product_name_en','product_thambnail','selling_price','id','product_slug_en')->limit(5)->get();
+        return view('frontend.product.search_product', compact('products'));
+
+    }
 
 }

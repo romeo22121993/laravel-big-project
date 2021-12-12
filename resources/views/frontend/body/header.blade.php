@@ -40,6 +40,16 @@ $categories    = \App\Models\Category::where('category_id', 0)->orderBy('categor
                             </a>
                         </li>
                         <li>
+                            <a href="" type="button" data-toggle="modal" data-target="#ordertraking">
+                                <i class="icon fa fa-check"></i>
+                                @if(session()->get('language') == 'hindi')
+                                    Order TrackingHindi
+                                @else
+                                    Order Tracking
+                                @endif
+                            </a>
+                        </li>
+                        <li>
                             <a href="#">
                                 <i class="icon fa fa-check"></i>
                                 @if(session()->get('language') == 'hindi')
@@ -126,7 +136,8 @@ $categories    = \App\Models\Category::where('category_id', 0)->orderBy('categor
                 <div class="col-xs-12 col-sm-12 col-md-7 top-search-holder">
                     <!-- ============================================================= SEARCH AREA ============================================================= -->
                     <div class="search-area">
-                        <form>
+                        <form method="post" action="{{ route('product.search') }}">
+                            @csrf
                             <div class="control-group">
                                 <ul class="categories-filter animate-dropdown">
                                     <li class="dropdown"> <a class="dropdown-toggle"  data-toggle="dropdown" href="category.html">Categories <b class="caret"></b></a>
@@ -139,9 +150,10 @@ $categories    = \App\Models\Category::where('category_id', 0)->orderBy('categor
                                         </ul>
                                     </li>
                                 </ul>
-                                <input class="search-field" placeholder="Search here..." />
-                                <a class="search-button" href="#" ></a> </div>
+                                <input class="search-field"  id="search" name="search" placeholder="Search here..." />
+                                <button class="search-button" type="submit"></button> </div>
                         </form>
+                        <div id="searchProducts"></div>
                     </div>
                     <!-- ============================================================= SEARCH AREA : END ============================================================= -->
                 </div>
@@ -265,4 +277,28 @@ $categories    = \App\Models\Category::where('category_id', 0)->orderBy('categor
     </div>
     <!-- ============================================== NAVBAR : END ============================================== -->
 
+    <!-- Order Traking Modal -->
+    <div class="modal fade" id="ordertraking" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Track Your Order </h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+
+                    <form method="post" action="{{ route('order.tracking') }}">
+                        @csrf
+                        <div class="modal-body">
+                            <label>Invoice Code</label>
+                            <input type="text" name="code" required="" class="form-control" placeholder="Your Order Invoice Number">
+                        </div>
+                        <button class="btn btn-danger" type="submit" style="margin-left: 17px;"> Track Now </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
 </header>

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Order;
 use App\Models\SiteSetting;
 use Illuminate\Contracts\Auth\StatefulGuard;
 use Illuminate\Http\Request;
@@ -55,7 +56,20 @@ class AdminController extends Controller
         $settings  = SiteSetting::find(1);
         $viewFile  = ( $adminData->user_role == 'user' ) ? 'frontend.profile.user_dashboard' : 'admin.index';
 
-        return view( $viewFile,compact( 'adminData', 'settings' ) );
+
+        $date  = date('d-m-y');
+        $today = Order::where('order_date',$date)->sum('amount');
+
+        $month = date('F');
+        $month = Order::where('order_month',$month)->sum('amount');
+
+        $year  = date('Y');
+        $year  = Order::where('order_year',$year)->sum('amount');
+
+        $pending = Order::where('status','pending')->get();
+        $orders = Order::where('status','pending')->orderBy('id','DESC')->get();
+
+        return view( $viewFile, compact( 'adminData', 'settings', 'orders' ) );
 
     }
 

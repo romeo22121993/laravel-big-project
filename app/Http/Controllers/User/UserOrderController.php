@@ -25,7 +25,7 @@ class UserOrderController extends Controller
     public function MyOrders(){
 
     	$orders = Order::where('user_id', Auth::id())->orderBy('id','DESC')->get();
-    	return view('frontend.user.order.order_view',compact('orders'));
+    	return view('frontend.user.order.orders_view',compact('orders'));
 
     }
 
@@ -108,33 +108,29 @@ class UserOrderController extends Controller
 
     }
 
-    ///////////// Order Traking ///////
-
+    /**
+     * Function tracking of order
+     *
+     * @param Request $request
+     * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View|\Illuminate\Http\RedirectResponse
+     */
     public function OrderTraking(Request $request){
 
         $invoice = $request->code;
 
         $track = Order::where('invoice_no',$invoice)->first();
 
-        if ($track) {
-
-            // echo "<pre>";
-            // print_r($track);
-
-        return view('frontend.traking.track_order',compact('track'));
-
-        }else{
-
+        if ( $track ) {
+            return view('frontend.traking.track_order', compact('track') );
+        } else {
             $notification = array(
-            'message' => 'Invoice Code Is Invalid',
-            'alert-type' => 'error'
-        );
+                'message'    => 'Invoice Code Is Invalid',
+                'alert-type' => 'error'
+            );
 
-        return redirect()->back()->with($notification);
-
+            return redirect()->back()->with($notification);
         }
 
-    } // end mehtod
-
+    }
 
 }

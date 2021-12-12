@@ -101,7 +101,9 @@ class IndexController extends Controller
         $subcategory    = Category::where('category_id','>', 0)->orderBy('category_name_en','ASC')->get();
         $subsubcategory = Category::where('category_id','>', 0)->where('subcategory_id','>', 0)->orderBy('category_name_en','ASC')->get();
 
-        return view('auth.admin_login', compact( 'categories', 'subcategory', 'subsubcategory', 'sliders' ), ['guard' => 'admin']);
+        $settings       = SiteSetting::find(1);
+
+        return view('auth.admin_login', compact( 'settings', 'categories', 'subcategory', 'subsubcategory', 'sliders' ), ['guard' => 'admin']);
     }
 
     /**

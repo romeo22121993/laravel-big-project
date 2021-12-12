@@ -7,10 +7,61 @@ jQuery(document).ready(function() {
         }
     })
 
+
     /**
      * Function for products
      *
      */
+
+    $("#search").on("focus", function ( e ) {
+        console.log('focus');
+        e.preventDefault();
+        search_result_show();
+    })
+
+    $("#search").on("blur", function ( e ) {
+        e.preventDefault();
+        console.log('blur');
+        search_result_hide();
+    })
+
+    function search_result_hide(){
+        $("#searchProducts").slideUp();
+    }
+
+    function search_result_show(){
+        $("#searchProducts").slideDown();
+    }
+
+    /**
+     * Sesrching by key up on search input
+     *
+     */
+    $("body").on("keyup", "#search", function(){
+
+        let text = $("#search").val();
+        if (text.length > 1) {
+
+            $.ajax({
+                data: {search: text},
+                url : "/ajax/search-product",
+                method : 'post',
+                beforSend : function(request){
+                    return request.setReuestHeader('X-CSRF-Token',("meta[name='csrf-token']"))
+                },
+                success:function(result){
+                    $("#searchProducts").html(result);
+                }
+
+            });
+
+        }
+
+        if (text.length < 1 ) $("#searchProducts").html("");
+
+    });
+
+
     $(".add_to_cart_btn, .addToCartBtn").on("click", function ( e ) {
         e.preventDefault();
         addToCart();
@@ -659,7 +710,7 @@ jQuery(document).ready(function() {
             url: "/ajax/coupon-calculation",
             dataType: 'json',
             success:function(data){
-                if (data.total) {
+                if (data.total && data.total>0) {
                     $('#couponCalField').html(
                         `<tr>
                             <th>

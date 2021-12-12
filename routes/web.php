@@ -30,7 +30,7 @@ use App\Http\Controllers\User\CartPageController;
 use App\Http\Controllers\User\CheckoutController;
 use App\Http\Controllers\User\StripeController;
 use App\Http\Controllers\User\CashController;
-//use App\Http\Controllers\User\ReviewController;
+use App\Http\Controllers\User\ReviewController;
 use App\Http\Controllers\User\UserOrderController;
 //
 //use App\Http\Controllers\Frontend\ShopController;
@@ -117,7 +117,13 @@ Route::group(['middleware' => ['web']], function () {
         Route::get('/district-get/{division_id}', [CheckoutController::class, 'DistrictGetAjax']);
         Route::get('/state-get/{district_id}',    [CheckoutController::class, 'StateGetAjax']);
 
+        // Advance Search Routes
+        Route::post('search-product', [FrontEndController::class, 'SearchProduct']);
+
     });
+
+    /// Product Search Route
+    Route::post('/search',        [FrontEndController::class, 'ProductSearch'])->name('product.search');
 
     /**
      * Stripe
@@ -138,6 +144,9 @@ Route::group(['middleware' => ['web']], function () {
 
     // Frontend Sub-SubCategory wise Data
     Route::get('/subcategory/{subsubcat_id}/{slug}', [FrontEndController::class, 'SubSubCatWiseProduct']);
+
+    /// Frontend Product Review Routes
+    Route::post('/review/store', [ReviewController::class, 'ReviewStore'])->name('review.store');
 });
 
 /**
@@ -326,14 +335,10 @@ Route::group(['prefix'=> 'admin', 'middleware' => ['auth', 'user'] ], function()
 
     // Admin Manage Review Routes
     Route::prefix('review')->group(function(){
-
-        Route::get('/pending', [ReviewController::class, 'PendingReview'])->name('pending.review');
-
+        Route::get('/pending',            [ReviewController::class, 'PendingReview'])->name('pending.review');
         Route::get('/admin/approve/{id}', [ReviewController::class, 'ReviewApprove'])->name('review.approve');
-
-        Route::get('/publish', [ReviewController::class, 'PublishReview'])->name('publish.review');
-
-        Route::get('/delete/{id}', [ReviewController::class, 'DeleteReview'])->name('delete.review');
+        Route::get('/publish',            [ReviewController::class, 'PublishReview'])->name('publish.review');
+        Route::get('/delete/{id}',        [ReviewController::class, 'DeleteReview'])->name('delete.review');
 
     });
 
@@ -389,30 +394,16 @@ Route::group( ['prefix'=>'user', 'middleware' => ['auth', 'user'] ],function(){
 });
 
 
-
-
-// Admin Return Order Routes
-Route::prefix('return')->group(function(){
-
-Route::get('/admin/request', [ReturnController::class, 'ReturnRequest'])->name('return.request');
-
-Route::get('/admin/return/approve/{order_id}', [ReturnController::class, 'ReturnRequestApprove'])->name('return.approve');
-
-Route::get('/admin/all/request', [ReturnController::class, 'ReturnAllRequest'])->name('all.request');
-
-});
-
-/// Frontend Product Review Routes
-
-Route::post('/review/store', [ReviewController::class, 'ReviewStore'])->name('review.store');
-
-
-/// Product Search Route
-Route::post('/search', [IndexController::class, 'ProductSearch'])->name('product.search');
-
-// Advance Search Routes
-Route::post('search-product', [IndexController::class, 'SearchProduct']);
-
+//// Admin Return Order Routes
+//Route::prefix('return')->group(function(){
+//
+//Route::get('/admin/request', [ReturnController::class, 'ReturnRequest'])->name('return.request');
+//
+//Route::get('/admin/return/approve/{order_id}', [ReturnController::class, 'ReturnRequestApprove'])->name('return.approve');
+//
+//Route::get('/admin/all/request', [ReturnController::class, 'ReturnAllRequest'])->name('all.request');
+//
+//});
 
 // Shop Page Route
 Route::get('/shop', [ShopController::class, 'ShopPage'])->name('shop.page');

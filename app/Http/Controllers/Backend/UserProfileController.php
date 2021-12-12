@@ -32,7 +32,6 @@ class UserProfileController extends Controller
         return view('frontend.profile.user_profile', compact('user'));
     }
 
-
     /**
      * Function updating profile
      *
@@ -101,6 +100,6 @@ class UserProfileController extends Controller
             return redirect()->back();
         }
 
-    }// end method
+    }
 
 }

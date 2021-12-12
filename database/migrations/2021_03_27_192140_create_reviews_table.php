@@ -19,13 +19,14 @@ class CreateReviewsTable extends Migration
             $table->unSignedBigInteger('user_id')->unsigned();
             $table->text('comment');
             $table->string('summary');
+            $table->string('rating');
             $table->foreign('product_id')
                     ->references('id')->on('products')
                     ->onDelete('cascade');
 
             $table->foreign('user_id')
                     ->references('id')->on('users')
-                    ->onDelete('cascade');       
+                    ->onDelete('cascade');
 
             $table->string('status')->default(0);
             $table->timestamps();

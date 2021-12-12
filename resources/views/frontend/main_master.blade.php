@@ -1,3 +1,6 @@
+@php
+  $settings  = \App\Models\SiteSetting::find(1);
+@endphp
 <!DOCTYPE html>
 <html lang="en">
 <head>
