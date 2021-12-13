@@ -926,4 +926,10 @@ jQuery(document).ready(function() {
         }
     }
 
+
+    /**
+     * Shop filters action
+     *
+     */
+
 })

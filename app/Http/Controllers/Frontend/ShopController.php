@@ -22,19 +22,25 @@ class ShopController extends Controller
 
         $products = Product::query();
 
-        if ( !empty($_GET['category']) ) {
+        if ( !empty($_GET['category']) && empty($_GET['brand'])  ) {
             $slugs    = explode(',',$_GET['category']);
             $catIds   = Category::select('id')->whereIn('category_slug_en', $slugs)->pluck('id')->toArray();
-            $products = $products->whereIn('category_id',$catIds)->paginate(1);
+            $products = $products->whereIn('category_id', $catIds)->paginate(2);
         }
-
-        if ( !empty($_GET['brand']) ) {
+        elseif ( !empty($_GET['brand']) && empty($_GET['category']) ) {
             $slugs    = explode(',',$_GET['brand']);
             $brandIds = Brand::select('id')->whereIn('brand_slug_en', $slugs)->pluck('id')->toArray();
-            $products = $products->whereIn('brand_id',$brandIds)->paginate(1);
+            $products = $products->whereIn('brand_id',$brandIds)->paginate(2);
+        }
+        elseif ( !empty($_GET['category']) && !empty($_GET['brand'])  ) {
+            $slugs    = explode(',',$_GET['category']);
+            $catIds   = Category::select('id')->whereIn('category_slug_en', $slugs)->pluck('id')->toArray();
+            $slugs1   = explode(',',$_GET['brand']);
+            $brandIds = Brand::select('id')->whereIn('brand_slug_en', $slugs1)->pluck('id')->toArray();
+            $products = $products->whereIn('category_id', $catIds)->orWhereIn('brand_id',$brandIds)->paginate(2);
         }
         else {
-            $products = Product::where('status',1)->orderBy('id','DESC')->paginate(1);
+            $products = Product::where('status', 1)->orderBy('id','DESC')->paginate(2);
         }
 
         $index_controller = new IndexController();
@@ -69,7 +75,7 @@ class ShopController extends Controller
         $catUrl = "";
         if (!empty($data['category'])) {
            foreach ($data['category'] as $category) {
-              if (empty($catUrl)) {
+              if ( empty( $catUrl ) ) {
                  $catUrl .= '&category='.$category;
               } else {
                 $catUrl .= ','.$category;
