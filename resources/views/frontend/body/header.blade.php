@@ -266,6 +266,11 @@ $categories    = \App\Models\Category::where('category_id', 0)->orderBy('categor
                                     </ul>
                                 </li>
                                 @endforeach
+                                <li class="dropdown yamm mega-menu">
+                                    <a href="{{ route('shop') }}" data-hover="dropdown" class="dropdown-toggle" data-toggle="dropdown">
+                                        @if(session()->get('language') == 'hindi') ShopH @else Shop @endif
+                                    </a>
+                                </li>
                             </ul>
                             <div class="clearfix"></div>
                         </div>

@@ -58,6 +58,10 @@ class ProductController extends Controller
 
         $digitalItem = '';
 
+        $request->validate([
+            'file' => 'required|mimes:doc,docx,pdf|max:2048'
+        ]);
+
         if ( !empty( $request->file('file') ) && ( $files = $request->file('file') )) {
             $destinationPath = 'upload/products/pdf'; // upload path
             $digitalItem = date('YmdHis') . "." . $files->getClientOriginalExtension();

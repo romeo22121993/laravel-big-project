@@ -62,7 +62,6 @@ class FrontEndController extends Controller
     public function SubCatWiseProduct(Request $request, $subcat_id, $slug){
 
         $products = Product::where('status',1)->where('subcategory_id', $subcat_id)->orderBy('id','DESC')->paginate(1);
-
         $categories = Category::where('category_id', 0)->orderBy('category_name_en', 'ASC')->get();
 
         $tags_en  = Product::groupBy('product_tags_en')->select('product_tags_en')->get();
@@ -72,19 +71,15 @@ class FrontEndController extends Controller
         $tags_en  =  $this->index_controller->getDistinctTags( $tags_en, 'en' );
         $chosen_tag  = '';
 
-//        $breadsubcat = Category::with(['category'])->where('id',$subcat_id)->get();
         $breadsubcat = 'ff';
 
         ///  Load More Product with Ajax
-         /*
         if ($request->ajax()) {
             $grid_view = view('frontend.product.grid_view_product',compact('products'))->render();
-
             $list_view = view('frontend.product.list_view_product',compact('products'))->render();
-            return response()->json(['grid_view' => $grid_view,'list_view',$list_view]);
-
+            return response()->json(['grid_view' => $grid_view, 'list_view' => $list_view]);
         }
-         */
+
         ///  End Load More Product with Ajax
 
         return view('frontend.product.subcategory_view',compact('products','categories','breadsubcat', 'tags_en', 'tags_hin', 'chosen_tag'));

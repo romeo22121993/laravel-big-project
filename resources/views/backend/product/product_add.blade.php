@@ -16,6 +16,10 @@
             <div class="box-body">
                 <div class="row">
                     <div class="col">
+                        @foreach ($errors->all() as $error)
+                            <p class="text-danger">{{ $error }}</p>
+                        @endforeach
+
                         <form method="post" action="{{ route('product.store') }}" enctype="multipart/form-data" >
                             @csrf
 
@@ -56,7 +60,7 @@
                                         </div>
                                     </div>
 
-                                </div> <!-- end col md 4 -->
+                                </div>
 
                                 <div class="col-md-4">
 
@@ -405,6 +409,9 @@
                                     <div class="controls">
                                         <input type="file" name="file" class="form-control" >
                                     </div>
+                                    @error('file')
+                                    <span class="text-danger">{{ $message }}</span>
+                                    @enderror
                                 </div>
 
                             </div> <!-- end col md 4 -->

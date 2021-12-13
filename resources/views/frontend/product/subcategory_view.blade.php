@@ -10,12 +10,6 @@
             <div class="breadcrumb-inner">
                 <ul class="list-inline list-unstyled">
                     <li><a href="#">Home</a></li>
-{{--                    @foreach($breadsubcat as $item)--}}
-{{--                        <li class='active'>{{ $item->category->category_name_en }}</li>--}}
-{{--                    @endforeach--}}
-{{--                    @foreach($breadsubcat as $item)--}}
-{{--                        <li class='active'>{{ $item->category_name_en }}</li>--}}
-{{--                    @endforeach--}}
                 </ul>
             </div>
         </div>
@@ -218,14 +212,19 @@
                                 <div class="pagination-container">
                                     <ul class="list-inline list-unstyled">
                                     </ul>
+                                    {{ $products->links() }}
                                 </div>
+                            </div>
+                            <div class="ajax-loadmore-product-btn text-center" data-page="2">
+                                <p style=" padding: 10px; background: red; margin: 0 auto; width: 200px;">Load More</p>
                             </div>
                         </div>
                     </div>
                 </div>
                 <div class="ajax-loadmore-product text-center" style="display: none;">
-                    <img src="{{ asset('frontend/assets/images/loading.gif') }}" style="width: 120px; height: 120px;">
+                    <img src="{{ asset('frontend/assets/images/loading.gif') }}" style="width: 40px; height: 40px;">
                 </div>
+
             </div>
 
             <!-- ============================================== BRANDS CAROUSEL ============================================== -->
@@ -248,8 +247,6 @@
             <!-- ============================================== BRANDS CAROUSEL : END ============================================== -->
         </div>
     </div>
-
-
 
 
 @endsection

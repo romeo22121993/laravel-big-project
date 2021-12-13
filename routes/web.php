@@ -32,8 +32,8 @@ use App\Http\Controllers\User\StripeController;
 use App\Http\Controllers\User\CashController;
 use App\Http\Controllers\User\ReviewController;
 use App\Http\Controllers\User\UserOrderController;
-//
-//use App\Http\Controllers\Frontend\ShopController;
+
+use App\Http\Controllers\Frontend\ShopController;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -147,6 +147,10 @@ Route::group(['middleware' => ['web']], function () {
 
     /// Frontend Product Review Routes
     Route::post('/review/store', [ReviewController::class, 'ReviewStore'])->name('review.store');
+
+    // Shop Page Route
+    Route::get('/shop',         [ShopController::class, 'ShopPage'])->name('shop');
+    Route::post('/shop/filter', [ShopController::class, 'ShopFilter'])->name('shop.filter');
 });
 
 /**
@@ -405,6 +409,4 @@ Route::group( ['prefix'=>'user', 'middleware' => ['auth', 'user'] ],function(){
 //
 //});
 
-// Shop Page Route
-Route::get('/shop', [ShopController::class, 'ShopPage'])->name('shop.page');
-Route::post('/shop/filter', [ShopController::class, 'ShopFilter'])->name('shop.filter');
+
