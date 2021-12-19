@@ -20,6 +20,7 @@ use App\Http\Controllers\Backend\SiteSettingController;
 //use App\Http\Controllers\Backend\AdminUserController;
 
 use App\Http\Controllers\Frontend\IndexController;
+use App\Http\Controllers\Chat\ChatController;
 use App\Http\Controllers\Frontend\FrontEndController;
 use App\Http\Controllers\Frontend\LanguageController;
 use App\Http\Controllers\Frontend\CartController;
@@ -34,6 +35,7 @@ use App\Http\Controllers\User\ReviewController;
 use App\Http\Controllers\User\UserOrderController;
 
 use App\Http\Controllers\Frontend\ShopController;
+use Inertia\Inertia;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -44,6 +46,7 @@ use App\Http\Controllers\Frontend\ShopController;
 | contains the "web" middleware group. Now create something great!
 |
 */
+
 
 Route::group(['middleware' => ['web']], function () {
 
@@ -152,6 +155,17 @@ Route::group(['middleware' => ['web']], function () {
     Route::get('/shop',         [ShopController::class, 'ShopPage'])->name('shop');
     Route::post('/shop/filter', [ShopController::class, 'ShopFilter'])->name('shop.filter');
 });
+
+Route::group(['middleware' => ['auth:sanctum', 'web'] ], function(){
+    Route::get('/chat',      [ChatController::class, 'ChatVue'])->name('chat');
+    Route::get('/chat-vue',  [ChatController::class, 'ChatVue1'])->name('chat1');
+
+    Route::middleware( 'auth:sanctum')->get('/chat/rooms', [ChatController::class, 'rooms']);
+    Route::middleware( 'auth:sanctum')->get('/chat/rooms/{roomId}/messages', [ChatController::class, 'messages']);
+    Route::middleware( 'auth:sanctum')->post('/chat/rooms/{roomId}/messages', [ChatController::class, 'newMessage']);
+
+});
+
 
 /**
  * Admin Dashboard

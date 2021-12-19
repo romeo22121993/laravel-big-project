@@ -271,6 +271,16 @@ $categories    = \App\Models\Category::where('category_id', 0)->orderBy('categor
                                         @if(session()->get('language') == 'hindi') ShopH @else Shop @endif
                                     </a>
                                 </li>
+                                <li class="dropdown yamm mega-menu">
+                                    <a href="{{ route('chat') }}" >
+                                        @if(session()->get('language') == 'hindi') ChatH @else Chat @endif
+                                    </a>
+                                </li>
+                                <li class="dropdown yamm mega-menu">
+                                    <a href="{{ route('chat1') }}" >
+                                        @if(session()->get('language') == 'hindi') Chat1H @else Chat1 @endif
+                                    </a>
+                                </li>
                             </ul>
                             <div class="clearfix"></div>
                         </div>

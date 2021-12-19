@@ -1,7 +1,16 @@
+/**
+ * First we will load all of this project's JavaScript dependencies which
+ * includes Vue and other libraries. It is a great starting point when
+ * building robust, powerful web applications using Vue and Laravel.
+ */
+
 require('./bootstrap');
 
-import Alpine from 'alpinejs';
+window.Vue = require('vue').default;
 
-window.Alpine = Alpine;
+// Vue.component('chat-component', require('./components/ChatComponent.vue').default);
+Vue.component('container',  require('./Pages/Chat/container.vue').default);
 
-Alpine.start();
+const app = new Vue({
+    el: '#app'
+});
