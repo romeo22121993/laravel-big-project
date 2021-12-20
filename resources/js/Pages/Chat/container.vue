@@ -2,10 +2,16 @@
     <div class="container" id='app'>
         <h3>Chat</h3>
         <chat-room-selection
+            v-if="currentRoom.id"
             :rooms="chatRooms"
             :currentRoom="currentRoom"
             v-on:roomchanged="setRoom($event)"
+            v-on:roomcreated="chatRooms"
         ></chat-room-selection>
+        <chat-room-creation
+            :rooms="chatRooms"
+            v-on:roomcreated="chatRooms"
+        ></chat-room-creation>
         <message-container :messages="messages" v-on:messagesent="setRoom(currentRoom)"></message-container>
         <input-message :room="currentRoom"
            v-on:messagesent="getMessages()"
@@ -16,8 +22,9 @@
     import MessageContainer from "./MessageContainer";
     import InputMessage from "./InputMessage";
     import ChatRoomSelection from "./ChatRoomSelection";
+    import ChatRoomCreation from "./ChatRoomCreation";
     export default {
-        components: {ChatRoomSelection, InputMessage, MessageContainer},
+        components: {ChatRoomCreation, ChatRoomSelection, InputMessage, MessageContainer},
         // name: 'chat-component',
         mounted() {
             this.getRooms();
@@ -43,12 +50,19 @@
                 if ( this.currentRoom.id) {
                     let vm = this;
                     this.getMessages();
+                    this.getRooms();
 
                     window.Echo.private('chat.'+this.currentRoom.id)
                         .listen('.message.new', e => {
                             vm.getMessages();
                         });
+
+                    window.Echo.private('room-new')
+                        .listen('.room.new', e => {
+                            vm.getRooms();
+                        });
                 }
+
             },
             disconnect(room) {
                 window.Echo.leave("chat."+this.currentRoom.id)

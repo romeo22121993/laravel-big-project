@@ -163,6 +163,7 @@ Route::group(['middleware' => ['auth:sanctum', 'web'] ], function(){
     Route::middleware( 'auth:sanctum')->get('/chat/rooms', [ChatController::class, 'rooms']);
     Route::middleware( 'auth:sanctum')->get('/chat/rooms/{roomId}/messages', [ChatController::class, 'messages']);
     Route::middleware( 'auth:sanctum')->post('/chat/rooms/{roomId}/messages', [ChatController::class, 'newMessage']);
+    Route::middleware( 'auth:sanctum')->post('/chat/rooms/create', [ChatController::class, 'newRoom']);
 
 });
 
