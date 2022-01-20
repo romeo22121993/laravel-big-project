@@ -15,7 +15,7 @@
 
     <!-- /// Google Analytics Code // -->
     <script>
-        {{ $settings->google_analytics }}
+{{--        {{ $settings->google_analytics }}--}}
     </script>
     <!-- /// Google Analytics Code // -->
 
@@ -43,6 +43,10 @@
 
     <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.css" >
     <script src="https://js.stripe.com/v3/"></script>
+    <script src="{{ asset('frontend/assets/js/jquery-1.11.1.min.js') }}"></script>
+    <script src="https://js.pusher.com/7.0.3/pusher.min.js"></script>
+
+
 </head>
 <body class="cnt-home">
     <!-- ============================================== HEADER ============================================== -->
@@ -102,6 +106,7 @@
         @endif
 
     </script>
+
 
     <!-- Add to Cart Product Modal -->
     <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
@@ -173,6 +178,7 @@
         </div>
     </div>
     <!-- End Add to Cart Product Modal -->
+{{--    <script src="{{ asset('js/app.js') }}"></script>--}}
 
 </body>
 </html>

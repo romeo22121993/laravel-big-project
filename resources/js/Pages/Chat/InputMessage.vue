@@ -17,6 +17,14 @@
                 roman: '',
             }
         },
+        watch:{
+            message() {
+                window.Echo.private('chat.'+this.currentRoom.id)
+                    .whisper('typing', {
+                        name: this.message
+                    })
+            }
+        },
         methods: {
             sendMessage() {
                 if ( this.roman == '') {

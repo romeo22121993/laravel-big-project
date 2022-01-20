@@ -27,7 +27,7 @@
         components: {ChatRoomCreation, ChatRoomSelection, InputMessage, MessageContainer},
         // name: 'chat-component',
         mounted() {
-            this.getRooms();
+            // this.getRooms();
             console.log('Component chat mounted.')
         },
         data: function () {
@@ -55,7 +55,11 @@
                     window.Echo.private('chat.'+this.currentRoom.id)
                         .listen('.message.new', e => {
                             vm.getMessages();
-                        });
+                        })
+                        .listenForWhisper('typing', () => {
+                            console.log('type', e.name);
+                        })
+                    ;
 
                     window.Echo.private('room-new')
                         .listen('.room.new', e => {
@@ -70,7 +74,6 @@
             getRooms() {
                 axios.get('/chat/rooms')
                 .then( response => {
-                    console.log('first', response.data[0])
                     this.chatRooms = response.data;
                     this.setRoom(response.data[0]);
                 } )

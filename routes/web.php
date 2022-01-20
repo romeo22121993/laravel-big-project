@@ -24,6 +24,7 @@ use App\Http\Controllers\Chat\ChatController;
 use App\Http\Controllers\Frontend\FrontEndController;
 use App\Http\Controllers\Frontend\LanguageController;
 use App\Http\Controllers\Frontend\CartController;
+use App\Http\Controllers\Frontend\GameController;
 use App\Http\Controllers\Frontend\HomeBlogController;
 
 use App\Http\Controllers\User\WishlistController;
@@ -159,6 +160,12 @@ Route::group(['middleware' => ['web']], function () {
 Route::group(['middleware' => ['auth:sanctum', 'web'] ], function(){
     Route::get('/chat',      [ChatController::class, 'ChatVue'])->name('chat');
     Route::get('/chat-vue',  [ChatController::class, 'ChatVue1'])->name('chat1');
+    Route::get('/tic-toc-game',    [GameController::class, 'GamePage'])->name('game-tik-tok');
+    Route::post('/new-game',       [GameController::class, 'newGame']);
+    Route::get('/board/{id}',      [GameController::class, 'board']);
+    Route::post('/play/{id}',      [GameController::class, 'play']);
+    Route::post('/game-over/{id}', [GameController::class, 'gameOver']);
+
 
     Route::middleware( 'auth:sanctum')->get('/chat/rooms', [ChatController::class, 'rooms']);
     Route::middleware( 'auth:sanctum')->get('/chat/rooms/{roomId}/messages', [ChatController::class, 'messages']);

@@ -5164,6 +5164,13 @@ __webpack_require__.r(__webpack_exports__);
       roman: ''
     };
   },
+  watch: {
+    message: function message() {
+      window.Echo["private"]('chat.' + this.currentRoom.id).whisper('typing', {
+        name: this.message
+      });
+    }
+  },
   methods: {
     sendMessage: function sendMessage() {
       var _this = this;
@@ -5305,7 +5312,7 @@ __webpack_require__.r(__webpack_exports__);
   },
   // name: 'chat-component',
   mounted: function mounted() {
-    this.getRooms();
+    // this.getRooms();
     console.log('Component chat mounted.');
   },
   data: function data() {
@@ -5332,6 +5339,8 @@ __webpack_require__.r(__webpack_exports__);
         this.getRooms();
         window.Echo["private"]('chat.' + this.currentRoom.id).listen('.message.new', function (e) {
           vm.getMessages();
+        }).listenForWhisper('typing', function () {
+          console.log('type', e.name);
         });
         window.Echo["private"]('room-new').listen('.room.new', function (e) {
           vm.getRooms();
@@ -5345,7 +5354,6 @@ __webpack_require__.r(__webpack_exports__);
       var _this = this;
 
       axios.get('/chat/rooms').then(function (response) {
-        console.log('first', response.data[0]);
         _this.chatRooms = response.data;
 
         _this.setRoom(response.data[0]);
@@ -5429,7 +5437,7 @@ window.axios.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest';
 window.Pusher = __webpack_require__(/*! pusher-js */ "./node_modules/pusher-js/dist/web/pusher.js");
 window.Echo = new laravel_echo__WEBPACK_IMPORTED_MODULE_0__.default({
   broadcaster: 'pusher',
-  key: "8d8ea85177d8bd292f98",
+  key: "890add177e2f7ea1dc57",
   cluster: "us2",
   forceTLS: true
 });
